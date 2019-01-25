@@ -13,6 +13,7 @@ view: _campaign {
 
   dimension_group: _fivetran_synced {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -122,11 +123,6 @@ view: _campaign {
     sql: ${TABLE}.last_activity_date ;;
   }
 
-  dimension: last_modified_by_id {
-    type: string
-    sql: ${TABLE}.last_modified_by_id ;;
-  }
-
   dimension_group: last_modified {
     type: time
     timeframes: [
@@ -209,13 +205,9 @@ view: _campaign {
     sql: ${TABLE}.number_sent ;;
   }
 
-  dimension: owner_id {
-    type: string
-    sql: ${TABLE}.owner_id ;;
-  }
-
   dimension: parent_id {
     type: string
+    hidden: yes
     sql: ${TABLE}.parent_id ;;
   }
 
@@ -239,6 +231,7 @@ view: _campaign {
   }
 
   dimension_group: system_modstamp {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -260,5 +253,17 @@ view: _campaign {
   measure: count {
     type: count
     drill_fields: [id, name, opportunity.count]
+  }
+
+  dimension: owner_id {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.owner_id ;;
+  }
+
+  dimension: last_modified_by_id {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.last_modified_by_id ;;
   }
 }

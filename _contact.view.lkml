@@ -8,6 +8,7 @@ view: _contact {
   dimension: jigsaw_contact_id {
     primary_key: yes
     type: string
+    hidden:  yes
     sql: ${TABLE}.jigsaw_contact_id ;;
   }
 
@@ -27,7 +28,7 @@ view: _contact {
 
   dimension: account_id {
     type: string
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.account_id ;;
   }
 
@@ -63,6 +64,7 @@ view: _contact {
   dimension: created_by_id {
     type: string
     sql: ${TABLE}.created_by_id ;;
+    hidden: yes
   }
 
   dimension_group: created {
@@ -95,6 +97,7 @@ view: _contact {
   }
 
   dimension_group: email_bounced {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -141,11 +144,13 @@ view: _contact {
   dimension: is_email_bounced {
     type: yesno
     sql: ${TABLE}.is_email_bounced ;;
+    hidden:  yes
   }
 
   dimension: jigsaw {
     type: string
     sql: ${TABLE}.jigsaw ;;
+    hidden: yes
   }
 
   dimension: languages_c {
@@ -169,6 +174,7 @@ view: _contact {
 
   dimension_group: last_curequest {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -183,6 +189,7 @@ view: _contact {
 
   dimension_group: last_cuupdate {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -221,6 +228,7 @@ view: _contact {
 
   dimension_group: last_referenced {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -300,6 +308,7 @@ view: _contact {
   dimension: master_record_id {
     type: string
     sql: ${TABLE}.master_record_id ;;
+    hidden:  yes
   }
 
   dimension: mobile_phone {
@@ -360,6 +369,7 @@ view: _contact {
   dimension: owner_id {
     type: string
     sql: ${TABLE}.owner_id ;;
+    hidden: yes
   }
 
   dimension: phone {
@@ -375,6 +385,7 @@ view: _contact {
   dimension: reports_to_id {
     type: string
     sql: ${TABLE}.reports_to_id ;;
+    hidden: yes
   }
 
   dimension: salutation {
@@ -384,6 +395,7 @@ view: _contact {
 
   dimension_group: system_modstamp {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
