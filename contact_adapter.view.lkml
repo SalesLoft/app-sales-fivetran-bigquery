@@ -1,14 +1,15 @@
 # These views shouldn't be changed, extend them in sf_extends instead.
 # If you need to re-generate the file, simply delete it and click "Create View from Table" and rename it from account to _account (for example).
 
-view: _lead {
+view: contact_adapter {
   extension: required #add this if you re-generate this file
-  sql_table_name: salesforce.lead ;;
+  extends: [contact_schema]
 
-  dimension: id {
+  dimension: jigsaw_contact_id {
     primary_key: yes
     type: string
-    sql: ${TABLE}.id ;;
+    hidden:  yes
+    sql: ${TABLE}.jigsaw_contact_id ;;
   }
 
   dimension_group: _fivetran_synced {
@@ -25,42 +26,23 @@ view: _lead {
     sql: ${TABLE}._fivetran_synced ;;
   }
 
-  dimension: annual_revenue {
-    type: number
-    sql: ${TABLE}.annual_revenue ;;
-  }
-
-  dimension: city {
+  dimension: account_id {
     type: string
-    sql: ${TABLE}.city ;;
+    hidden: yes
+    sql: ${TABLE}.account_id ;;
   }
 
-  dimension: clean_status {
+  dimension: assistant_name {
     type: string
-    sql: ${TABLE}.clean_status ;;
+    sql: ${TABLE}.assistant_name ;;
   }
 
-  dimension: company {
+  dimension: assistant_phone {
     type: string
-    sql: ${TABLE}.company ;;
+    sql: ${TABLE}.assistant_phone ;;
   }
 
-  dimension: company_duns_number {
-    type: string
-    sql: ${TABLE}.company_duns_number ;;
-  }
-
-  dimension: converted_account_id {
-    type: string
-    sql: ${TABLE}.converted_account_id ;;
-  }
-
-  dimension: converted_contact_id {
-    type: string
-    sql: ${TABLE}.converted_contact_id ;;
-  }
-
-  dimension_group: converted {
+  dimension_group: birthdate {
     type: time
     timeframes: [
       raw,
@@ -71,23 +53,18 @@ view: _lead {
       quarter,
       year
     ]
-    sql: ${TABLE}.converted_date ;;
+    sql: ${TABLE}.birthdate ;;
   }
 
-  dimension: converted_opportunity_id {
+  dimension: clean_status {
     type: string
-    sql: ${TABLE}.converted_opportunity_id ;;
-  }
-
-  dimension: country {
-    type: string
-    map_layer_name: countries
-    sql: ${TABLE}.country ;;
+    sql: ${TABLE}.clean_status ;;
   }
 
   dimension: created_by_id {
     type: string
     sql: ${TABLE}.created_by_id ;;
+    hidden: yes
   }
 
   dimension_group: created {
@@ -104,14 +81,9 @@ view: _lead {
     sql: ${TABLE}.created_date ;;
   }
 
-  dimension: current_generators_c {
+  dimension: department {
     type: string
-    sql: ${TABLE}.current_generators_c ;;
-  }
-
-  dimension: dandb_company_id {
-    type: string
-    sql: ${TABLE}.dandb_company_id ;;
+    sql: ${TABLE}.department ;;
   }
 
   dimension: description {
@@ -125,6 +97,7 @@ view: _lead {
   }
 
   dimension_group: email_bounced {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -153,19 +126,14 @@ view: _lead {
     sql: ${TABLE}.first_name ;;
   }
 
-  dimension: geocode_accuracy {
+  dimension: home_phone {
     type: string
-    sql: ${TABLE}.geocode_accuracy ;;
+    sql: ${TABLE}.home_phone ;;
   }
 
-  dimension: industry {
+  dimension: id {
     type: string
-    sql: ${TABLE}.industry ;;
-  }
-
-  dimension: is_converted {
-    type: yesno
-    sql: ${TABLE}.is_converted ;;
+    sql: ${TABLE}.id ;;
   }
 
   dimension: is_deleted {
@@ -173,19 +141,21 @@ view: _lead {
     sql: ${TABLE}.is_deleted ;;
   }
 
-  dimension: is_unread_by_owner {
+  dimension: is_email_bounced {
     type: yesno
-    sql: ${TABLE}.is_unread_by_owner ;;
+    sql: ${TABLE}.is_email_bounced ;;
+    hidden:  yes
   }
 
   dimension: jigsaw {
     type: string
     sql: ${TABLE}.jigsaw ;;
+    hidden: yes
   }
 
-  dimension: jigsaw_contact_id {
+  dimension: languages_c {
     type: string
-    sql: ${TABLE}.jigsaw_contact_id ;;
+    sql: ${TABLE}.languages_c ;;
   }
 
   dimension_group: last_activity {
@@ -200,6 +170,36 @@ view: _lead {
       year
     ]
     sql: ${TABLE}.last_activity_date ;;
+  }
+
+  dimension_group: last_curequest {
+    type: time
+    hidden: yes
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.last_curequest_date ;;
+  }
+
+  dimension_group: last_cuupdate {
+    type: time
+    hidden: yes
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.last_cuupdate_date ;;
   }
 
   dimension: last_modified_by_id {
@@ -228,6 +228,7 @@ view: _lead {
 
   dimension_group: last_referenced {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -254,24 +255,60 @@ view: _lead {
     sql: ${TABLE}.last_viewed_date ;;
   }
 
-  dimension: latitude {
-    type: number
-    sql: ${TABLE}.latitude ;;
-  }
-
   dimension: lead_source {
     type: string
     sql: ${TABLE}.lead_source ;;
   }
 
-  dimension: longitude {
+  dimension: level_c {
+    type: string
+    sql: ${TABLE}.level_c ;;
+  }
+
+  dimension: mailing_city {
+    type: string
+    sql: ${TABLE}.mailing_city ;;
+  }
+
+  dimension: mailing_country {
+    type: string
+    sql: ${TABLE}.mailing_country ;;
+  }
+
+  dimension: mailing_geocode_accuracy {
+    type: string
+    sql: ${TABLE}.mailing_geocode_accuracy ;;
+  }
+
+  dimension: mailing_latitude {
     type: number
-    sql: ${TABLE}.longitude ;;
+    sql: ${TABLE}.mailing_latitude ;;
+  }
+
+  dimension: mailing_longitude {
+    type: number
+    sql: ${TABLE}.mailing_longitude ;;
+  }
+
+  dimension: mailing_postal_code {
+    type: string
+    sql: ${TABLE}.mailing_postal_code ;;
+  }
+
+  dimension: mailing_state {
+    type: string
+    sql: ${TABLE}.mailing_state ;;
+  }
+
+  dimension: mailing_street {
+    type: string
+    sql: ${TABLE}.mailing_street ;;
   }
 
   dimension: master_record_id {
     type: string
     sql: ${TABLE}.master_record_id ;;
+    hidden:  yes
   }
 
   dimension: mobile_phone {
@@ -284,19 +321,55 @@ view: _lead {
     sql: ${TABLE}.name ;;
   }
 
-  dimension: number_of_employees {
-    type: number
-    sql: ${TABLE}.number_of_employees ;;
+  dimension: other_city {
+    type: string
+    sql: ${TABLE}.other_city ;;
   }
 
-  dimension: numberof_locations_c {
+  dimension: other_country {
+    type: string
+    sql: ${TABLE}.other_country ;;
+  }
+
+  dimension: other_geocode_accuracy {
+    type: string
+    sql: ${TABLE}.other_geocode_accuracy ;;
+  }
+
+  dimension: other_latitude {
     type: number
-    sql: ${TABLE}.numberof_locations_c ;;
+    sql: ${TABLE}.other_latitude ;;
+  }
+
+  dimension: other_longitude {
+    type: number
+    sql: ${TABLE}.other_longitude ;;
+  }
+
+  dimension: other_phone {
+    type: string
+    sql: ${TABLE}.other_phone ;;
+  }
+
+  dimension: other_postal_code {
+    type: string
+    sql: ${TABLE}.other_postal_code ;;
+  }
+
+  dimension: other_state {
+    type: string
+    sql: ${TABLE}.other_state ;;
+  }
+
+  dimension: other_street {
+    type: string
+    sql: ${TABLE}.other_street ;;
   }
 
   dimension: owner_id {
     type: string
     sql: ${TABLE}.owner_id ;;
+    hidden: yes
   }
 
   dimension: phone {
@@ -309,24 +382,10 @@ view: _lead {
     sql: ${TABLE}.photo_url ;;
   }
 
-  dimension: postal_code {
+  dimension: reports_to_id {
     type: string
-    sql: ${TABLE}.postal_code ;;
-  }
-
-  dimension: primary_c {
-    type: string
-    sql: ${TABLE}.primary_c ;;
-  }
-
-  dimension: product_interest_c {
-    type: string
-    sql: ${TABLE}.product_interest_c ;;
-  }
-
-  dimension: rating {
-    type: string
-    sql: ${TABLE}.rating ;;
+    sql: ${TABLE}.reports_to_id ;;
+    hidden: yes
   }
 
   dimension: salutation {
@@ -334,28 +393,9 @@ view: _lead {
     sql: ${TABLE}.salutation ;;
   }
 
-  dimension: siccode_c {
-    type: string
-    sql: ${TABLE}.sic_code_c ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-
-  dimension: status {
-    type: string
-    sql: ${TABLE}.status ;;
-  }
-
-  dimension: street {
-    type: string
-    sql: ${TABLE}.street ;;
-  }
-
   dimension_group: system_modstamp {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -373,13 +413,22 @@ view: _lead {
     sql: ${TABLE}.title ;;
   }
 
-  dimension: website {
-    type: string
-    sql: ${TABLE}.website ;;
-  }
-
   measure: count {
     type: count
-    drill_fields: [id, name, first_name, last_name]
+    drill_fields: [detail*]
+  }
+
+  # ----- Sets of fields for drilling ------
+  set: detail {
+    fields: [
+      jigsaw_contact_id,
+      name,
+      assistant_name,
+      first_name,
+      last_name,
+      account.id,
+      account.name,
+      user.count
+    ]
   }
 }
