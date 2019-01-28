@@ -1,28 +1,12 @@
-# These views shouldn't be changed, extend them in sf_extends instead.
-# If you need to re-generate the file, simply delete it and click "Create View from Table" and rename it from account to _account (for example).
 
-view: _opportunity_stage {
-  extension: required #add this if you re-generate this file
-  sql_table_name: salesforce.opportunity_stage ;;
+view: opportunity_stage_adapter {
+  extends: [opportunity_stage_schema]
+  extension: required
 
   dimension: id {
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
-  }
-
-  dimension_group: _fivetran_synced {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._fivetran_synced ;;
   }
 
   dimension: api_name {
@@ -114,6 +98,7 @@ view: _opportunity_stage {
   }
 
   dimension_group: system_modstamp {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -125,6 +110,21 @@ view: _opportunity_stage {
       year
     ]
     sql: ${TABLE}.system_modstamp ;;
+  }
+
+  dimension_group: _fivetran_synced {
+    hidden: yes
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}._fivetran_synced ;;
   }
 
   measure: count {
