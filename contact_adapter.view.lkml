@@ -1,9 +1,9 @@
 # These views shouldn't be changed, extend them in sf_extends instead.
 # If you need to re-generate the file, simply delete it and click "Create View from Table" and rename it from account to _account (for example).
 
-view: _contact {
+view: contact_adapter {
   extension: required #add this if you re-generate this file
-  sql_table_name: salesforce.contact ;;
+  extends: [contact_schema]
 
   dimension: jigsaw_contact_id {
     primary_key: yes

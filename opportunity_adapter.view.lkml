@@ -1,9 +1,9 @@
 # These views shouldn't be changed, extend them in sf_extends instead.
 # If you need to re-generate the file, simply delete it and click "Create View from Table" and rename it from account to _account (for example).
 
-view: _opportunity {
+view: opportunity_adapter {
   extension: required #add this if you re-generate this file
-  sql_table_name: salesforce.opportunity ;;
+  extends: [opportunity_schema]
 
   dimension: id {
     primary_key: yes
@@ -259,7 +259,9 @@ view: _opportunity {
   dimension: stage_name {
     type: string
     sql: ${TABLE}.stage_name ;;
-    order_by_field: opportunity_stage.sort_order
+    # Commented out for now, as the reference to opportunity_stage in the order_by_field is causing issues with the opportunity explore
+    # (WHEN opportunity_stage isn't joined into the explore)
+#     order_by_field: opportunity_stage.sort_order
   }
 
   dimension_group: system_modstamp {
