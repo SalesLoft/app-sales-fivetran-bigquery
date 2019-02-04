@@ -256,6 +256,11 @@ view: opportunity_adapter {
     sql: ${TABLE}.probability ;;
   }
 
+  dimension: source {
+    type: string
+    sql: 'undefined' ;;
+  }
+
   dimension: stage_name {
     type: string
     sql: ${TABLE}.stage_name ;;
