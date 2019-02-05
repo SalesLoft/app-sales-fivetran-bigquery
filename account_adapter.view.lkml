@@ -130,6 +130,24 @@ view: account_adapter {
 #     sql: ${TABLE}.duns_number ;;
 #   }
 
+  dimension: domain {
+    sql: ${TABLE}.domain_c ;;
+  }
+
+  dimension: logo64 {
+    sql: ${domain} ;;
+    html: <a href="http://{{ value }}" target="_new">
+      <img src="http://logo.clearbit.com/{{ value }}" height=64 width=64></a>
+      ;;
+  }
+
+  dimension: logo {
+    sql: ${domain} ;;
+    html: <a href="http://{{ value }}" target="_new">
+      <img src="http://logo.clearbit.com/{{ value }}" height=128 width=128></a>
+      ;;
+  }
+
   dimension: fax {
     type: string
     sql: ${TABLE}.fax ;;
