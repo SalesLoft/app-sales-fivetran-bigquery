@@ -52,6 +52,7 @@ view: user_adapter {
   dimension: call_center_id {
     type: string
     sql: ${TABLE}.call_center_id ;;
+    hidden: yes
   }
 
   dimension: city {
@@ -62,6 +63,7 @@ view: user_adapter {
   dimension: community_nickname {
     type: string
     sql: ${TABLE}.community_nickname ;;
+    hidden: yes
   }
 
   dimension: company_name {
@@ -71,7 +73,7 @@ view: user_adapter {
 
   dimension: contact_id {
     type: string
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.contact_id ;;
   }
 
@@ -135,21 +137,25 @@ view: user_adapter {
   dimension: email_encoding_key {
     type: string
     sql: ${TABLE}.email_encoding_key ;;
+    hidden: yes
   }
 
   dimension: email_preferences_auto_bcc {
     type: yesno
     sql: ${TABLE}.email_preferences_auto_bcc ;;
+    hidden: yes
   }
 
   dimension: email_preferences_auto_bcc_stay_in_touch {
     type: yesno
     sql: ${TABLE}.email_preferences_auto_bcc_stay_in_touch ;;
+    hidden: yes
   }
 
   dimension: email_preferences_stay_in_touch_reminder {
     type: yesno
     sql: ${TABLE}.email_preferences_stay_in_touch_reminder ;;
+    hidden: yes
   }
 
   dimension: employee_number {
@@ -170,6 +176,7 @@ view: user_adapter {
   dimension: federation_identifier {
     type: string
     sql: ${TABLE}.federation_identifier ;;
+    hidden: yes
   }
 
   dimension: first_name {
@@ -190,6 +197,7 @@ view: user_adapter {
   dimension: geocode_accuracy {
     type: string
     sql: ${TABLE}.geocode_accuracy ;;
+    hidden: yes
   }
 
   dimension: is_active {
@@ -200,16 +208,19 @@ view: user_adapter {
   dimension: is_profile_photo_active {
     type: yesno
     sql: ${TABLE}.is_profile_photo_active ;;
+    hidden: yes
   }
 
   dimension: jigsaw_import_limit_override {
     type: number
     sql: ${TABLE}.jigsaw_import_limit_override ;;
+    hidden: yes
   }
 
   dimension: language_locale_key {
     type: string
     sql: ${TABLE}.language_locale_key ;;
+    hidden: yes
   }
 
   dimension_group: last_login {
@@ -224,11 +235,13 @@ view: user_adapter {
       year
     ]
     sql: ${TABLE}.last_login_date ;;
+    hidden: yes
   }
 
   dimension: last_modified_by_id {
     type: string
     sql: ${TABLE}.last_modified_by_id ;;
+    hidden: yes
   }
 
   dimension_group: last_modified {
@@ -262,6 +275,7 @@ view: user_adapter {
       year
     ]
     sql: ${TABLE}.last_password_change_date ;;
+    hidden: yes
   }
 
   dimension_group: last_referenced {
@@ -276,6 +290,7 @@ view: user_adapter {
       year
     ]
     sql: ${TABLE}.last_referenced_date ;;
+    hidden: yes
   }
 
   dimension_group: last_viewed {
@@ -300,6 +315,7 @@ view: user_adapter {
   dimension: locale_sid_key {
     type: string
     sql: ${TABLE}.locale_sid_key ;;
+    hidden: yes
   }
 
   dimension: longitude {
@@ -310,6 +326,7 @@ view: user_adapter {
   dimension: manager_id {
     type: string
     sql: ${TABLE}.manager_id ;;
+    hidden: yes
   }
 
   dimension: mobile_phone {
@@ -363,16 +380,19 @@ view: user_adapter {
   dimension: profile_id {
     type: string
     sql: ${TABLE}.profile_id ;;
+    hidden: yes
   }
 
   dimension: receives_admin_info_emails {
     type: yesno
     sql: ${TABLE}.receives_admin_info_emails ;;
+    hidden: yes
   }
 
   dimension: receives_info_emails {
     type: yesno
     sql: ${TABLE}.receives_info_emails ;;
+    hidden: yes
   }
 
   dimension: sender_email {
@@ -448,6 +468,7 @@ view: user_adapter {
   dimension: user_role_id {
     type: string
     sql: ${TABLE}.user_role_id ;;
+    hidden: yes
   }
 
   dimension: user_type {

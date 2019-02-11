@@ -23,6 +23,7 @@ view: lead_adapter {
       year
     ]
     sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
   }
 
   dimension: annual_revenue {
@@ -48,16 +49,19 @@ view: lead_adapter {
   dimension: company_duns_number {
     type: string
     sql: ${TABLE}.company_duns_number ;;
+    hidden: yes
   }
 
   dimension: converted_account_id {
     type: string
     sql: ${TABLE}.converted_account_id ;;
+    hidden: yes
   }
 
   dimension: converted_contact_id {
     type: string
     sql: ${TABLE}.converted_contact_id ;;
+    hidden: yes
   }
 
   dimension_group: converted {
@@ -77,6 +81,7 @@ view: lead_adapter {
   dimension: converted_opportunity_id {
     type: string
     sql: ${TABLE}.converted_opportunity_id ;;
+    hidden: yes
   }
 
   dimension: country {
@@ -88,6 +93,7 @@ view: lead_adapter {
   dimension: created_by_id {
     type: string
     sql: ${TABLE}.created_by_id ;;
+    hidden: yes
   }
 
   dimension_group: created {
@@ -112,6 +118,7 @@ view: lead_adapter {
   dimension: dandb_company_id {
     type: string
     sql: ${TABLE}.dandb_company_id ;;
+    hidden: yes
   }
 
   dimension: description {
@@ -136,11 +143,13 @@ view: lead_adapter {
       year
     ]
     sql: ${TABLE}.email_bounced_date ;;
+    hidden: yes
   }
 
   dimension: email_bounced_reason {
     type: string
     sql: ${TABLE}.email_bounced_reason ;;
+    hidden: yes
   }
 
   dimension: fax {
@@ -176,16 +185,19 @@ view: lead_adapter {
   dimension: is_unread_by_owner {
     type: yesno
     sql: ${TABLE}.is_unread_by_owner ;;
+    hidden: yes
   }
 
   dimension: jigsaw {
     type: string
     sql: ${TABLE}.jigsaw ;;
+    hidden: yes
   }
 
   dimension: jigsaw_contact_id {
     type: string
     sql: ${TABLE}.jigsaw_contact_id ;;
+    hidden: yes
   }
 
   dimension_group: last_activity {
@@ -205,6 +217,7 @@ view: lead_adapter {
   dimension: last_modified_by_id {
     type: string
     sql: ${TABLE}.last_modified_by_id ;;
+    hidden: yes
   }
 
   dimension_group: last_modified {
@@ -238,6 +251,7 @@ view: lead_adapter {
       year
     ]
     sql: ${TABLE}.last_referenced_date ;;
+    hidden: yes
   }
 
   dimension_group: last_viewed {
@@ -252,6 +266,7 @@ view: lead_adapter {
       year
     ]
     sql: ${TABLE}.last_viewed_date ;;
+    hidden: yes
   }
 
   dimension: latitude {
@@ -272,6 +287,7 @@ view: lead_adapter {
   dimension: master_record_id {
     type: string
     sql: ${TABLE}.master_record_id ;;
+    hidden: yes
   }
 
   dimension: mobile_phone {
@@ -297,6 +313,7 @@ view: lead_adapter {
   dimension: owner_id {
     type: string
     sql: ${TABLE}.owner_id ;;
+    hidden: yes
   }
 
   dimension: phone {
@@ -366,6 +383,7 @@ view: lead_adapter {
       year
     ]
     sql: ${TABLE}.system_modstamp ;;
+    hidden: yes
   }
 
   dimension: title {

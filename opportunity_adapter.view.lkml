@@ -9,6 +9,7 @@ view: opportunity_adapter {
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
+    hidden: yes
   }
 
   dimension_group: _fivetran_synced {
@@ -23,22 +24,24 @@ view: opportunity_adapter {
       year
     ]
     sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
   }
 
   dimension: account_id {
     type: string
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.account_id ;;
   }
 
   dimension: amount {
     type: number
     sql: ${TABLE}.amount ;;
+    hidden: yes
   }
 
   dimension: campaign_id {
     type: string
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.campaign_id ;;
   }
 
@@ -59,6 +62,7 @@ view: opportunity_adapter {
   dimension: created_by_id {
     type: string
     sql: ${TABLE}.created_by_id ;;
+    hidden: yes
   }
 
   dimension_group: created {
@@ -172,6 +176,7 @@ view: opportunity_adapter {
   dimension: last_modified_by_id {
     type: string
     sql: ${TABLE}.last_modified_by_id ;;
+    hidden: yes
   }
 
   dimension_group: last_modified {
@@ -200,6 +205,7 @@ view: opportunity_adapter {
       year
     ]
     sql: ${TABLE}.last_referenced_date ;;
+    hidden: yes
   }
 
   dimension_group: last_viewed {
@@ -249,6 +255,7 @@ view: opportunity_adapter {
   dimension: pricebook_2_id {
     type: string
     sql: ${TABLE}.pricebook_2_id ;;
+    hidden: yes
   }
 
   dimension: probability {
@@ -281,6 +288,7 @@ view: opportunity_adapter {
       year
     ]
     sql: ${TABLE}.system_modstamp ;;
+    hidden: yes
   }
 
   dimension: total_opportunity_quantity {
