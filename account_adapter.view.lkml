@@ -22,6 +22,7 @@ view: account_adapter {
       year
     ]
     sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
   }
 
   dimension: account_number {
@@ -57,6 +58,7 @@ view: account_adapter {
   dimension: billing_geocode_accuracy {
     type: string
     sql: ${TABLE}.billing_geocode_accuracy ;;
+    hidden: yes
   }
 
   dimension: billing_latitude {
@@ -93,6 +95,7 @@ view: account_adapter {
   dimension: created_by_id {
     type: string
     sql: ${TABLE}.created_by_id ;;
+    hidden: yes
   }
 
   dimension_group: created {
@@ -166,11 +169,13 @@ view: account_adapter {
   dimension: jigsaw {
     type: string
     sql: ${TABLE}.jigsaw ;;
+    hidden: yes
   }
 
   dimension: jigsaw_company_id {
     type: string
     sql: ${TABLE}.jigsaw_company_id ;;
+    hidden: yes
   }
 
   dimension_group: last_activity {
@@ -190,6 +195,7 @@ view: account_adapter {
   dimension: last_modified_by_id {
     type: string
     sql: ${TABLE}.last_modified_by_id ;;
+    hidden: yes
   }
 
   dimension_group: last_modified {
@@ -237,6 +243,7 @@ view: account_adapter {
   dimension: master_record_id {
     type: string
     sql: ${TABLE}.master_record_id ;;
+    hidden: yes
   }
 
 #   dimension: naics_code {
@@ -268,6 +275,7 @@ view: account_adapter {
   dimension: owner_id {
     type: string
     sql: ${TABLE}.owner_id ;;
+    hidden: yes
   }
 
   dimension: ownership {
@@ -278,6 +286,7 @@ view: account_adapter {
   dimension: parent_id {
     type: string
     sql: ${TABLE}.parent_id ;;
+    hidden: yes
   }
 
   dimension: phone {
@@ -308,6 +317,7 @@ view: account_adapter {
   dimension: shipping_geocode_accuracy {
     type: string
     sql: ${TABLE}.shipping_geocode_accuracy ;;
+    hidden: yes
   }
 
   dimension: shipping_latitude {

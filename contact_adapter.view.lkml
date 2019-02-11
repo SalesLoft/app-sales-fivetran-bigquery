@@ -24,6 +24,7 @@ view: contact_adapter {
       year
     ]
     sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
   }
 
   dimension: account_id {
@@ -114,6 +115,7 @@ view: contact_adapter {
   dimension: email_bounced_reason {
     type: string
     sql: ${TABLE}.email_bounced_reason ;;
+    hidden: yes
   }
 
   dimension: fax {
@@ -134,6 +136,7 @@ view: contact_adapter {
   dimension: id {
     type: string
     sql: ${TABLE}.id ;;
+    hidden: yes
   }
 
   dimension: is_deleted {
