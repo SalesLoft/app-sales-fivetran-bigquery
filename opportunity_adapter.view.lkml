@@ -264,9 +264,6 @@ view: opportunity_adapter {
   dimension: stage_name {
     type: string
     sql: ${TABLE}.stage_name ;;
-    # Commented out for now, as the reference to opportunity_stage in the order_by_field is causing issues with the opportunity explore
-    # (WHEN opportunity_stage isn't joined into the explore)
-#     order_by_field: opportunity_stage.sort_order
   }
 
   dimension_group: system_modstamp {
