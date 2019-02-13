@@ -8,19 +8,28 @@ view: user_adapter {
     sql: ${TABLE}.id ;;
   }
 
-  dimension_group: _fivetran_synced {
-    hidden: yes
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._fivetran_synced ;;
+  dimension_group: age  {
+    type: duration
+    datatype: date
+    sql_start: ${created_date}  ;;
+    sql_end: current_date ;;
+  }
+
+  dimension: tenure_months {
+    label: "Tenure Months"
+    type: string
+    sql: concat(cast(${months_age} as string)," Months") ;;
+  }
+
+  dimension: tenure {
+    label: "Tenure"
+    type: string
+    sql: concat(
+    cast(floor(${months_age}/12) as string)," Years ",
+    cast(floor(mod(${months_age}, 12)) as string)," Months ",
+    cast(date_diff(current_date, DATE_ADD( ${created_date}, INTERVAL cast(floor(${months_age}) as int64) MONTH), DAY) as string)," Days")
+    ;;
+    order_by_field: days_age
   }
 
   dimension: about_me {
@@ -439,25 +448,7 @@ view: user_adapter {
     type: string
     sql: ${TABLE}.street ;;
   }
-#
-#   dimension_group: system_modstamp {
-#     type: time
-#     timeframes: [
-#       raw,
-#       time,
-#       date,
-#       week,
-#       month,
-#       quarter,
-#       year
-#     ]
-#     sql: ${TABLE}.system_modstamp ;;
-#   }
-#
-#   dimension: time_zone_sid_key {
-#     type: string
-#     sql: ${TABLE}.time_zone_sid_key ;;
-#   }
+
 
   dimension: title {
     type: string
@@ -508,6 +499,41 @@ view: user_adapter {
   }
 }
 ########################################################################################################################################################################
+
+
+#
+#   dimension_group: system_modstamp {
+#     type: time
+#     timeframes: [
+#       raw,
+#       time,
+#       date,
+#       week,
+#       month,
+#       quarter,
+#       year
+#     ]
+#     sql: ${TABLE}.system_modstamp ;;
+#   }
+#
+#   dimension: time_zone_sid_key {
+#     type: string
+#     sql: ${TABLE}.time_zone_sid_key ;;
+#   }
+# dimension_group: _fivetran_synced {
+#   hidden: yes
+#   type: time
+#   timeframes: [
+#     raw,
+#     time,
+#     date,
+#     week,
+#     month,
+#     quarter,
+#     year
+#   ]
+#   sql: ${TABLE}._fivetran_synced ;;
+# }
 
 #   dimension: user_permissions_call_center_auto_login {
 #     type: yesno
