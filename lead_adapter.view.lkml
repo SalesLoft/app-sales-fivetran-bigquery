@@ -11,6 +11,12 @@ view: lead_adapter {
     sql: ${TABLE}.id ;;
   }
 
+  dimension_group: as_lead {
+    type: duration
+    sql_start: ${created_raw}  ;;
+    sql_end: current_timestamp  ;;
+  }
+
   dimension_group: _fivetran_synced {
     type: time
     timeframes: [
