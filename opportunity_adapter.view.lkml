@@ -12,19 +12,9 @@ view: opportunity_adapter {
     hidden: yes
   }
 
-  dimension_group: _fivetran_synced {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._fivetran_synced ;;
-    hidden: yes
+  dimension: type {
+    type: string
+    sql: ${TABLE}.type ;;
   }
 
   dimension: account_id {
@@ -77,16 +67,6 @@ view: opportunity_adapter {
       year
     ]
     sql: ${TABLE}.created_date ;;
-  }
-
-  dimension: current_generators_c {
-    type: string
-    sql: ${TABLE}.current_generators_c ;;
-  }
-
-  dimension: delivery_installation_status_c {
-    type: string
-    sql: ${TABLE}.delivery_installation_status_c ;;
   }
 
   dimension: description {
@@ -227,10 +207,6 @@ view: opportunity_adapter {
     sql: ${TABLE}.lead_source ;;
   }
 
-  dimension: main_competitors_c {
-    type: string
-    sql: ${TABLE}.main_competitors_c ;;
-  }
 
   dimension: name {
     type: string
@@ -297,14 +273,19 @@ view: opportunity_adapter {
     sql: ${TABLE}.total_opportunity_quantity ;;
   }
 
-  dimension: tracking_number_c {
-    type: string
-    sql: ${TABLE}.tracking_number_c ;;
-  }
-
-  dimension: type {
-    type: string
-    sql: ${TABLE}.type ;;
+  dimension_group: _fivetran_synced {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}._fivetran_synced ;;
+    hidden: yes
   }
 
   measure: count {
@@ -325,4 +306,26 @@ view: opportunity_adapter {
       account.name
     ]
   }
+
+
+
+#
+#   dimension: main_competitors_c {
+#     type: string
+#     sql: ${TABLE}.main_competitors_c ;;
+#   }
+#
+#   dimension: tracking_number_c {
+#     type: string
+#     sql: ${TABLE}.tracking_number_c ;;
+#   }
+#   dimension: current_generators_c {
+#     type: string
+#     sql: ${TABLE}.current_generators_c ;;
+#   }
+#
+#   dimension: delivery_installation_status_c {
+#     type: string
+#     sql: ${TABLE}.delivery_installation_status_c ;;
+#   }
 }
