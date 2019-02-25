@@ -211,6 +211,10 @@ view: opportunity_adapter {
   dimension: name {
     type: string
     sql: ${TABLE}.name ;;
+    html: <a href="https://na9.salesforce.com/{{ opportunity.id._value }}" target="_new">
+    <img src="https://www.google.com/s2/favicons?domain=www.salesforce.com" height=16 width=16></a>
+    {{ linked_value }}
+    ;;
   }
 
   dimension: next_step {
