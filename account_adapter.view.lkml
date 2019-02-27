@@ -259,6 +259,9 @@ view: account_adapter {
   dimension: name {
     type: string
     sql: ${TABLE}.name ;;
+    html: <a href="https://na9.salesforce.com/{{ account.id._value }}" target="_new">
+    <img src="https://www.google.com/s2/favicons?domain=www.salesforce.com" height=16 width=16></a>
+    {{ linked_value }};;
   }
 
 # changed from number_of_employees; needs string conversion
