@@ -20,25 +20,35 @@ view: user_age {
     explore_source: opportunity {
       filters: {field: opportunity.is_won
                 value: "Yes"}
+      filters: {field: opportunity_owner.is_rep
+        value: "Yes"}
+      bind_filters: {to_field: quota_numbers.ae_segment
+                    from_field: quota_map.segment_select}
       column: owner_id {}
       column: opportunity_id {field: opportunity.id}
       column: close_date {field: opportunity.close_raw}
       column: amount {field: opportunity.amount}
       column: opp_created_date {field: opportunity.created_raw}
       column: owner_created_date {field: opportunity_owner.created_raw}
-      derived_column: age_at_close {sql: date_diff(cast(opp_created_date as date),cast(owner_created_date as date), MONTH) ;;}
+      derived_column: age_at_close {sql: date_diff(cast(close_date as date),cast(owner_created_date as date), MONTH) ;;}
       }
       }
   dimension: owner_id {type: string}
   dimension: opportunity_id {type: string}
-  dimension: age_at_close {type: number}
   dimension: amount {type: number}
   dimension_group: close_date {type: time}
   dimension_group: opp_created_date {type: time}
   dimension_group: owner_created_date {type: time}
-  measure: total_amount {  }
-      }
-
+  dimension: age_at_close {
+    description: "Age at time of close in months"
+    type: number
+    sql: CASE WHEN ${TABLE}.age_at_close<0 THEN NULL
+              ELSE ${TABLE}.age_at_close
+              END
+        ;;}
+  dimension: age_at_close_raw {sql:${TABLE}.age_at_close;;}
+  measure: total_amount {type: sum}
+}
 
 
 #
@@ -62,7 +72,7 @@ view: sales_cycle_comparison {
   derived_table: {
     explore_source: opportunity {
       bind_filters: {to_field: quota_numbers.ae_segment
-        from_field: quota_map.segment_select}
+                    from_field: quota_map.segment_select}
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       column: owner_id {}
