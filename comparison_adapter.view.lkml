@@ -14,9 +14,48 @@
 # }
 #
 # }
+explore: user_age {}
+view: user_age {
+  derived_table: {
+    explore_source: opportunity {
+      filters: {field: opportunity.is_won
+                value: "Yes"}
+      column: owner_id {}
+      column: opportunity_id {field: opportunity.id}
+      column: close_date {field: opportunity.close_raw}
+      column: amount {field: opportunity.amount}
+      column: opp_created_date {field: opportunity.created_raw}
+      column: owner_created_date {field: opportunity_owner.created_raw}
+      derived_column: age_at_close {sql: date_diff(cast(opp_created_date as date),cast(owner_created_date as date), MONTH) ;;}
+      }
+      }
+  dimension: owner_id {type: string}
+  dimension: opportunity_id {type: string}
+  dimension: age_at_close {type: number}
+  dimension: amount {type: number}
+  dimension_group: close_date {type: time}
+  dimension_group: opp_created_date {type: time}
+  dimension_group: owner_created_date {type: time}
+  measure: total_amount {  }
+      }
 
 
 
+#
+# explore: comparison_base {
+#   from: sales_cycle_comparison
+#
+#   join: new_deal_size_comparison {
+#     sql_on: ${comparison_base.owner_id} = ${new_deal_size_comparison.owner_id} ;;
+#   }
+#
+#   join: win_percentage_comparison {
+#     sql_on: ${win_percentage_comparison.owner_id} = ${comparison_base.owner_id} ;;
+#   }
+#
+# #   join: comparison_base {}
+#
+# }
 
 
 view: sales_cycle_comparison {
