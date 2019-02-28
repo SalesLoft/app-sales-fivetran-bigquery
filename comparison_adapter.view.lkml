@@ -121,7 +121,6 @@ view: win_percentage_comparison {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       column: owner_id {}
-      column: close_date {}
       column: win_percentage {}
       derived_column: win_percentage_rank {sql: ROW_NUMBER() OVER (ORDER BY win_percentage desc);;}
       derived_column: win_percentage_bottom_third {sql: percentile_cont( coalesce(win_percentage,0)*1.00, .3333 ) OVER () ;;}
@@ -129,7 +128,10 @@ view: win_percentage_comparison {
     }
   }
   dimension: owner_id {type: string}
-  dimension: win_percentage {type: number}
+  dimension: win_percentage {
+    type: number
+    value_format_name: percent_2
+  }
   dimension: win_percentage_rank {type: number}
   dimension: win_percentage_bottom_third {type: number}
   dimension: win_percentage_top_third {type: number}
