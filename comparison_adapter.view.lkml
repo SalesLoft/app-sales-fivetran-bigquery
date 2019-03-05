@@ -20,10 +20,10 @@ view: user_age {
     explore_source: opportunity {
       filters: {field: opportunity.is_won
                 value: "Yes"}
-      filters: {field: opportunity_owner.is_rep
+      filters: {field: opportunity_owner.is_sales_rep
         value: "Yes"}
-      bind_filters: {to_field: quota_numbers.ae_segment
-                    from_field: quota_map.segment_select}
+#       bind_filters: {to_field: quota_numbers.ae_segment
+#                     from_field: quota_map.segment_select}
       column: owner_id {}
       column: opportunity_id {field: opportunity.id}
       column: close_date {field: opportunity.close_raw}
@@ -46,8 +46,12 @@ view: user_age {
               ELSE ${TABLE}.age_at_close
               END
         ;;}
-  dimension: age_at_close_raw {sql:${TABLE}.age_at_close;;}
   measure: total_amount {type: sum}
+  dimension: age_at_close_tier {
+    type: tier
+    tiers: [10,20,30,40,50,60,70]
+    sql: ${age_at_close} ;;
+    }
 }
 
 
@@ -76,7 +80,6 @@ view: sales_cycle_comparison {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       column: owner_id {}
-
       column: average_days_to_closed_won {}
       derived_column: cycle_rank {sql: ROW_NUMBER() OVER( ORDER BY average_days_to_closed_won);;}
       derived_column: cycle_bottom_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .3333 ) OVER () ;;}
@@ -84,15 +87,16 @@ view: sales_cycle_comparison {
     }
   }
   dimension: owner_id {type: string}
-  dimension: average_days_to_closed_won {type: number}
-  dimension: cycle_bottom_third {type: number}
-  dimension: cycle_top_third {type: number}
   dimension: cycle_rank {type: number}
   dimension: cycle_cohort {
     sql: CASE WHEN average_days_to_closed_won > cycle_top_third THEN 'Top Third'
                 WHEN average_days_to_closed_won < cycle_top_third AND average_days_to_closed_won > cycle_bottom_third THEN 'Middle Third'
                 WHEN average_days_to_closed_won < cycle_bottom_third THEN 'Bottom Third'
             END ;;}
+
+#   dimension: average_days_to_closed_won {type: number}
+#   dimension: cycle_bottom_third {type: number}
+#   dimension: cycle_top_third {type: number}
 }
 
 
@@ -111,15 +115,16 @@ view: new_deal_size_comparison {
     }
   }
   dimension: owner_id {type: string}
-  dimension: average_new_deal_size {type: number}
   dimension: deal_size_rank {type: number}
-  dimension: deal_size_top_third {type: number}
-  dimension: deal_size_bottom_third {type: number}
   dimension: deal_size_cohort  {
     sql: CASE WHEN average_new_deal_size > deal_size_top_third THEN 'Top Third'
               WHEN average_new_deal_size < deal_size_top_third AND average_new_deal_size > deal_size_bottom_third THEN 'Middle Third'
               WHEN average_new_deal_size < deal_size_bottom_third THEN 'Bottom Third'
           END ;;}
+
+#   dimension: average_new_deal_size {type: number}
+#   dimension: deal_size_top_third {type: number}
+#   dimension: deal_size_bottom_third {type: number}
 }
 
 
@@ -143,14 +148,14 @@ view: win_percentage_comparison {
     value_format_name: percent_2
   }
   dimension: win_percentage_rank {type: number}
-  dimension: win_percentage_bottom_third {type: number}
-  dimension: win_percentage_top_third {type: number}
   dimension: win_percentage_cohort {
     sql: CASE WHEN win_percentage > win_percentage_top_third THEN 'Top Third'
               WHEN win_percentage < win_percentage_top_third AND win_percentage > win_percentage_bottom_third THEN 'Middle Third'
               WHEN win_percentage < win_percentage_bottom_third THEN 'Bottom Third'
           END
       ;;}
+#   dimension: win_percentage_bottom_third {type: number}
+#   dimension: win_percentage_top_third {type: number}
 }
 
 
