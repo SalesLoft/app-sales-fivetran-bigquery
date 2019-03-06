@@ -55,22 +55,22 @@ view: user_age {
 }
 
 
-#
-# explore: comparison_base {
-#   from: sales_cycle_comparison
-#
-#   join: new_deal_size_comparison {
-#     sql_on: ${comparison_base.owner_id} = ${new_deal_size_comparison.owner_id} ;;
-#   }
-#
-#   join: win_percentage_comparison {
-#     sql_on: ${win_percentage_comparison.owner_id} = ${comparison_base.owner_id} ;;
-#   }
-#
-# #   join: comparison_base {}
-#
-# }
 
+view: total_amount_comparison {
+  derived_table: {
+    explore_source: opportunity {
+    filters: {field: opportunity.is_won value: "Yes"}
+    filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
+    column: owner_id {}
+    column: total_closed_won_new_business_amount {}
+    derived_column: total_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
+#       derived_column: cycle_bottom_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .3333 ) OVER () ;;}
+#       derived_column: cycle_top_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .6666 ) OVER () ;;}
+    }
+  }
+  dimension: owner_id {type: string hidden: yes}
+  dimension: total_amount_rank {type: number}
+}
 
 view: sales_cycle_comparison {
   derived_table: {
@@ -93,10 +93,6 @@ view: sales_cycle_comparison {
                 WHEN average_days_to_closed_won < cycle_top_third AND average_days_to_closed_won > cycle_bottom_third THEN 'Middle Third'
                 WHEN average_days_to_closed_won < cycle_bottom_third THEN 'Bottom Third'
             END ;;}
-
-#   dimension: average_days_to_closed_won {type: number}
-#   dimension: cycle_bottom_third {type: number}
-#   dimension: cycle_top_third {type: number}
 }
 
 
@@ -121,10 +117,6 @@ view: new_deal_size_comparison {
               WHEN average_new_deal_size < deal_size_top_third AND average_new_deal_size > deal_size_bottom_third THEN 'Middle Third'
               WHEN average_new_deal_size < deal_size_bottom_third THEN 'Bottom Third'
           END ;;}
-
-#   dimension: average_new_deal_size {type: number}
-#   dimension: deal_size_top_third {type: number}
-#   dimension: deal_size_bottom_third {type: number}
 }
 
 
@@ -154,8 +146,6 @@ view: win_percentage_comparison {
               WHEN win_percentage < win_percentage_bottom_third THEN 'Bottom Third'
           END
       ;;}
-#   dimension: win_percentage_bottom_third {type: number}
-#   dimension: win_percentage_top_third {type: number}
 }
 
 
