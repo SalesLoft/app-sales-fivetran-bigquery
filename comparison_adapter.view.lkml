@@ -1,19 +1,4 @@
 
-# sql dt to union rep onto the tiers
-# view: name_grouping {
-#   derived_table: {
-#     sql:
-#     SELECT
-#     userid,
-#     floor(month(datediff(opportunity.closedate, user.created_date) as age_of_ae_at_close_date,
-#     avg(opportunity.amount closed) as avg_deal_size
-#     avg(datediff(opportunity.created_date,opportunity.closed_date)) as sales_cycle
-#     win percentage
-#     ;;
-#
-# }
-#
-# }
 explore: user_age {}
 view: user_age {
   derived_table: {
@@ -33,7 +18,7 @@ view: user_age {
       derived_column: age_at_close {sql: date_diff(cast(close_date as date),cast(owner_created_date as date), MONTH) ;;}
       }
       }
-  dimension: owner_id {type: string}
+  dimension: owner_id {type: string hidden: yes}
   dimension: opportunity_id {type: string}
   dimension: amount {type: number}
   dimension_group: close_date {type: time}
@@ -86,7 +71,7 @@ view: sales_cycle_comparison {
       derived_column: cycle_top_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string}
+  dimension: owner_id {type: string hidden: yes}
   dimension: cycle_rank {type: number}
   dimension: cycle_cohort {
     sql: CASE WHEN average_days_to_closed_won > cycle_top_third THEN 'Top Third'
@@ -110,7 +95,7 @@ view: new_deal_size_comparison {
       derived_column: deal_size_top_third {sql: percentile_cont( coalesce(average_new_deal_size,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string}
+  dimension: owner_id {type: string hidden: yes}
   dimension: deal_size_rank {type: number}
   dimension: deal_size_cohort  {
     sql: CASE WHEN average_new_deal_size > deal_size_top_third THEN 'Top Third'
@@ -134,7 +119,7 @@ view: win_percentage_comparison {
       derived_column: win_percentage_top_third {sql: percentile_cont( coalesce(win_percentage,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string}
+  dimension: owner_id {type: string hidden: yes}
   dimension: win_percentage {
     type: number
     value_format_name: percent_2
@@ -147,9 +132,6 @@ view: win_percentage_comparison {
           END
       ;;}
 }
-
-
-
 
 
 #
