@@ -139,7 +139,7 @@ view: account_adapter {
 
   dimension: logo64 {
     sql: ${domain} ;;
-    html: <a href="http://{{ value }}" target="_new">
+    html: <a href="https://na9.salesforce.com/{{ opportunity.id._value }}" target="_new">
       <img src="http://logo.clearbit.com/{{ value }}" height=64 width=64></a>
       ;;
   }
@@ -363,30 +363,6 @@ view: account_adapter {
     sql: ${TABLE}.site ;;
   }
 
-#   dimension: sla_c {
-#     type: string
-#     sql: ${TABLE}.sla_c ;;
-#   }
-#
-#   dimension_group: slaexpiration_date_c {
-#     type: time
-#     timeframes: [
-#       raw,
-#       time,
-#       date,
-#       week,
-#       month,
-#       quarter,
-#       year
-#     ]
-#     sql: ${TABLE}.slaexpiration_date_c ;;
-#   }
-
-#   dimension: slaserial_number_c {
-#     type: string
-#     sql: ${TABLE}.slaserial_number_c ;;
-#   }
-
   dimension_group: system_modstamp {
     type: time
     timeframes: [
@@ -406,30 +382,15 @@ view: account_adapter {
     sql: ${TABLE}.ticker_symbol ;;
   }
 
-#   dimension: tradestyle {
-#     type: string
-#     sql: ${TABLE}.tradestyle ;;
-#   }
-
   dimension: type {
     type: string
     sql: ${TABLE}.type ;;
   }
 
-#   dimension: upsell_opportunity_c {
-#     type: string
-#     sql: ${TABLE}.upsell_opportunity_c ;;
-#   }
-
   dimension: website {
     type: string
     sql: ${TABLE}.website ;;
   }
-
-#   dimension: year_started {
-#     type: string
-#     sql: ${TABLE}.year_started ;;
-#   }
 
   measure: count {
     type: count

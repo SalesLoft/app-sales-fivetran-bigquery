@@ -2,12 +2,12 @@
 view: aggregate_comparison {
   derived_table: {
     explore_source: opportunity {
+    filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
     column: average_new_deal_size {}
     column: average_days_to_closed_won {}
     column: win_percentage {}
   }
   }
-
   dimension: aggregate_average_new_deal_size {sql: ${TABLE}.average_new_deal_size ;;}
   dimension: aggregate_average_days_to_closed_won {sql: ${TABLE}.average_days_to_closed_won ;;}
   dimension: aggregate_win_percentage_agg {sql: ${TABLE}.win_percentage ;;}
@@ -19,7 +19,7 @@ view: total_amount_comparison {
     explore_source: opportunity {
     filters: {field: opportunity.is_won value: "Yes"}
     filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
-    filters: {field: opportunity.closed_date value: "12 Months"}
+    filters: {field: opportunity.close_date value: "12 Months"}
     column: owner_id {}
     column: total_closed_won_new_business_amount {}
     derived_column: total_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
@@ -39,8 +39,8 @@ view: total_amount_comparison {
 view: sales_cycle_comparison {
   derived_table: {
     explore_source: opportunity {
-      bind_filters: {to_field: quota_numbers.ae_segment
-                    from_field: quota_map.segment_select}
+      bind_filters: {to_field: quota.ae_segment
+                    from_field: quota.segment_select}
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.close_date value: "12 Months"}
@@ -64,8 +64,8 @@ view: sales_cycle_comparison {
 view: new_deal_size_comparison {
   derived_table: {
     explore_source: opportunity {
-      bind_filters: {to_field: quota_map.ae_segment
-        from_field: quota_map.segment_select}
+      bind_filters: {to_field: quota.ae_segment
+        from_field: quota.segment_select}
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.close_date value: "18 Months"}
@@ -89,8 +89,8 @@ view: new_deal_size_comparison {
 view: win_percentage_comparison {
   derived_table: {
     explore_source: opportunity {
-      bind_filters: {to_field: quota_map.ae_segment
-        from_field: quota_map.segment_select}
+      bind_filters: {to_field: quota.ae_segment
+        from_field: quota.segment_select}
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.close_date value: "12 Months"}
