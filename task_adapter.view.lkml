@@ -88,7 +88,7 @@ view: task_adapter {
 
   dimension: description {
     type: string
-    sql: SUBSTR(${TABLE}.description,0,130) ;;
+    sql: CONCAT(SUBSTR(${TABLE}.description,0,130), "...") ;;
   }
 
   dimension: is_closed {
