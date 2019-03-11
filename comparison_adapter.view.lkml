@@ -5,7 +5,7 @@ view: user_age {
     explore_source: opportunity {
 #       filters: {field: opportunity.is_won  value: "Yes"}
     filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
-    filters: {field: opportunity.is_new_business value: "yes"}
+    filters: {field: opportunity.is_included_in_quota value: "yes"}
     column: owner_id {}
     column: opportunity_id {field: opportunity.id}
     column: close_date {field: opportunity.close_raw}
@@ -43,7 +43,7 @@ view: aggregate_comparison {
   derived_table: {
     explore_source: opportunity {
     filters: {field: opportunity_owner.is_sales_rep value: "yes"}
-    filters: {field: opportunity.is_new_business value: "yes"}
+    filters: {field: opportunity.is_included_in_quota value: "yes"}
     column: average_new_deal_size {}
     column: average_days_to_closed_won {}
     column: win_percentage {}
@@ -61,7 +61,7 @@ view: total_amount_comparison {
     filters: {field: opportunity.is_won value: "Yes"}
     filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
     filters: {field: opportunity.close_date value: "12 Months"}
-    filters: {field: opportunity.is_new_business value: "Yes"}
+    filters: {field: opportunity.is_included_in_quota value: "Yes"}
     column: owner_id {}
     column: total_closed_won_new_business_amount {}
     derived_column: total_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
@@ -92,7 +92,7 @@ view: sales_cycle_comparison {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.close_date value: "12 Months"}
-      filters: {field: opportunity.is_new_business value: "Yes"}
+      filters: {field: opportunity.is_included_in_quota value: "Yes"}
       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
 #       filters: {field: opportunity.percent_of_average_sales_cycle value: "<150"}
       column: owner_id {}
@@ -138,7 +138,7 @@ view: new_deal_size_comparison {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.close_date value: "18 Months"}
-      filters: {field: opportunity.is_new_business value: "Yes"}
+      filters: {field: opportunity.is_included_in_quota value: "Yes"}
       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
       column: owner_id {}
       column: average_new_deal_size {}
@@ -183,7 +183,7 @@ view: win_percentage_comparison {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.close_date value: "12 Months"}
-      filters: {field: opportunity.is_new_business value: "yes"}
+      filters: {field: opportunity.is_included_in_quota value: "yes"}
       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
       column: owner_id {}
       column: win_percentage {}
