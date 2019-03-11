@@ -129,6 +129,7 @@ view: opportunity_stage_adapter {
 
   measure: count {
     type: count
+    hidden:  yes
     drill_fields: [id, forecast_category_name, api_name]
   }
 }
