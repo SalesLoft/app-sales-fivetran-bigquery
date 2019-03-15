@@ -38,12 +38,12 @@ dimension: age_at_close_tier {
 }
 
 
-
 view: aggregate_comparison {
   derived_table: {
     explore_source: opportunity {
     filters: {field: opportunity_owner.is_sales_rep value: "yes"}
     filters: {field: opportunity.is_included_in_quota value: "yes"}
+#     filters: {field: opportunity.close_date value: "18 Months"}
     column: average_new_deal_size {}
     column: average_days_to_closed_won {}
     column: win_percentage {}
@@ -60,7 +60,7 @@ view: total_amount_comparison {
     explore_source: opportunity {
     filters: {field: opportunity.is_won value: "Yes"}
     filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
-    filters: {field: opportunity.close_date value: "12 Months"}
+    filters: {field: user_age.age_at_close value: "<18"}
     filters: {field: opportunity.is_included_in_quota value: "Yes"}
     column: owner_id {}
     column: total_closed_won_new_business_amount {}
@@ -88,10 +88,9 @@ view: sales_cycle_comparison {
       }
 #       bind_filters: {to_field: quota.segment_group
 #                     from_field: segment_lookup.name_filter}
-#
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
-      filters: {field: opportunity.close_date value: "12 Months"}
+      filters: {field: user_age.age_at_close value: "<18"}
       filters: {field: opportunity.is_included_in_quota value: "Yes"}
       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
 #       filters: {field: opportunity.percent_of_average_sales_cycle value: "<150"}
@@ -106,7 +105,7 @@ view: sales_cycle_comparison {
   dimension: cycle_rank {type: number}
   dimension: average_days_to_closed_won {type: number}
   dimension: cycle_cohort {
-    sql: CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Top Third'
+    sql:   CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Top Third'
                 WHEN ${average_days_to_closed_won} < cycle_top_third AND ${average_days_to_closed_won} > cycle_bottom_third THEN 'Middle Third'
                 WHEN ${average_days_to_closed_won} < cycle_bottom_third THEN 'Bottom Third'
             END ;;}
@@ -137,7 +136,7 @@ view: new_deal_size_comparison {
       }
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
-      filters: {field: opportunity.close_date value: "18 Months"}
+      filters: {field: user_age.age_at_close value: "<18"}
       filters: {field: opportunity.is_included_in_quota value: "Yes"}
       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
       column: owner_id {}
@@ -160,7 +159,7 @@ view: new_deal_size_comparison {
     type: string
     sql: CASE
         WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
-          THEN Concat(" ",${opportunity_owner.name})
+          THEN concat(" ",${opportunity_owner.name})
         ELSE ${deal_size_cohort}
         END
        ;;
@@ -182,7 +181,7 @@ view: win_percentage_comparison {
       }
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
-      filters: {field: opportunity.close_date value: "12 Months"}
+      filters: {field: user_age.age_at_close value: "<18"}
       filters: {field: opportunity.is_included_in_quota value: "yes"}
       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
       column: owner_id {}
@@ -208,7 +207,7 @@ view: win_percentage_comparison {
     type: string
     sql: CASE
         WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
-          THEN Concat(" ",${opportunity_owner.name})
+          THEN concat(" ",${opportunity_owner.name})
         ELSE ${win_percentage_cohort}
         END
        ;;
