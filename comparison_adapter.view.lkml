@@ -105,25 +105,22 @@ view: sales_cycle_comparison {
   dimension: cycle_rank {type: number}
   dimension: average_days_to_closed_won {type: number}
   dimension: cycle_cohort {
-    sql:   CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Top Third'
+    sql:   CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Bottom Third'
                 WHEN ${average_days_to_closed_won} < cycle_top_third AND ${average_days_to_closed_won} > cycle_bottom_third THEN 'Middle Third'
-                WHEN ${average_days_to_closed_won} < cycle_bottom_third THEN 'Bottom Third'
+                WHEN ${average_days_to_closed_won} < cycle_bottom_third THEN 'Top Third'
             END ;;}
-
   dimension: sales_cycle_cohort_comparitor {
     type: string
     sql: CASE
         WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
-          THEN Concat(" ",${opportunity_owner.name})
-        ELSE ${cycle_cohort}
+          THEN concat("    ",${opportunity_owner.name})
+        WHEN ${cycle_cohort} = 'Top Third' THEN concat("   ",${cycle_cohort})
+        WHEN ${cycle_cohort} = 'Middle Third' THEN concat("  ",${cycle_cohort})
+        WHEN ${cycle_cohort} = 'Bottom Third' THEN concat(" ",${cycle_cohort})
         END
        ;;
-#     case: {when: {sql: {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %};;
-#             label: "{{ opportunity_owner.name_select.parameter_value }}"}
-#           else: "{{ cycle_cohort._value }}"
-#     }
-#     }
   }
+
 }
 
 
