@@ -8,6 +8,7 @@ view: account_adapter {
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
+    hidden: yes
   }
 
   dimension_group: _fivetran_synced {
@@ -43,6 +44,7 @@ view: account_adapter {
   dimension: annual_revenue {
     type: number
     sql: ${TABLE}.annual_revenue ;;
+    hidden: yes
   }
 
   dimension: billing_city {
@@ -154,6 +156,7 @@ view: account_adapter {
   dimension: fax {
     type: string
     sql: ${TABLE}.fax ;;
+    hidden: yes
   }
 
   dimension: industry {
@@ -224,6 +227,7 @@ view: account_adapter {
       year
     ]
     sql: ${TABLE}.last_referenced_date ;;
+    hidden: yes
   }
 
   dimension_group: last_viewed {
@@ -238,6 +242,7 @@ view: account_adapter {
       year
     ]
     sql: ${TABLE}.last_viewed_date ;;
+    hidden: yes
   }
 
   dimension: master_record_id {
@@ -284,6 +289,7 @@ view: account_adapter {
   dimension: ownership {
     type: string
     sql: ${TABLE}.ownership ;;
+    hidden: yes
   }
 
   dimension: parent_id {
@@ -305,16 +311,19 @@ view: account_adapter {
   dimension: rating {
     type: string
     sql: ${TABLE}.rating ;;
+    hidden: yes
   }
 
   dimension: shipping_city {
     type: string
     sql: ${TABLE}.shipping_city ;;
+    hidden: yes
   }
 
   dimension: shipping_country {
     type: string
     sql: ${TABLE}.shipping_country ;;
+    hidden: yes
   }
 
   dimension: shipping_geocode_accuracy {
@@ -326,41 +335,49 @@ view: account_adapter {
   dimension: shipping_latitude {
     type: number
     sql: ${TABLE}.shipping_latitude ;;
+    hidden: yes
   }
 
   dimension: shipping_longitude {
     type: number
     sql: ${TABLE}.shipping_longitude ;;
+    hidden: yes
   }
 
   dimension: shipping_postal_code {
     type: string
     sql: ${TABLE}.shipping_postal_code ;;
+    hidden: yes
   }
 
   dimension: shipping_state {
     type: string
     sql: ${TABLE}.shipping_state ;;
+    hidden: yes
   }
 
   dimension: shipping_street {
     type: string
     sql: ${TABLE}.shipping_street ;;
+    hidden: yes
   }
 
   dimension: sic {
     type: string
     sql: ${TABLE}.sic ;;
+    hidden: yes
   }
 
   dimension: sic_desc {
     type: string
     sql: ${TABLE}.sic_desc ;;
+    hidden: yes
   }
 
   dimension: site {
     type: string
     sql: ${TABLE}.site ;;
+    hidden: yes
   }
 
   dimension_group: system_modstamp {
@@ -375,11 +392,13 @@ view: account_adapter {
       year
     ]
     sql: ${TABLE}.system_modstamp ;;
+    hidden: yes
   }
 
   dimension: ticker_symbol {
     type: string
     sql: ${TABLE}.ticker_symbol ;;
+    hidden: yes
   }
 
   dimension: type {

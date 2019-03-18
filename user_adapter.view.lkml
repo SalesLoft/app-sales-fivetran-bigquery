@@ -41,6 +41,7 @@ view: user_adapter {
   dimension: about_me {
     type: string
     sql: ${TABLE}.about_me ;;
+    hidden: yes
   }
 
   dimension: account_id {
@@ -52,16 +53,19 @@ view: user_adapter {
   dimension: alias {
     type: string
     sql: ${TABLE}.alias ;;
+    hidden: yes
   }
 
   dimension: badge_text {
     type: string
     sql: ${TABLE}.badge_text ;;
+    hidden: yes
   }
 
   dimension: banner_photo_url {
     type: string
     sql: ${TABLE}.banner_photo_url ;;
+    hidden: yes
   }
 
   dimension: call_center_id {
@@ -73,6 +77,7 @@ view: user_adapter {
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
+    hidden: yes
   }
 
   dimension: community_nickname {
@@ -96,6 +101,7 @@ view: user_adapter {
     type: string
     map_layer_name: countries
     sql: ${TABLE}.country ;;
+    hidden: yes
   }
 
   dimension: created_by_id {
@@ -121,6 +127,7 @@ view: user_adapter {
   dimension: default_group_notification_frequency {
     type: string
     sql: ${TABLE}.default_group_notification_frequency ;;
+    hidden: yes
   }
 
   dimension: delegated_approver_id {
@@ -137,6 +144,7 @@ view: user_adapter {
   dimension: digest_frequency {
     type: string
     sql: ${TABLE}.digest_frequency ;;
+    hidden: yes
   }
 
   dimension: division {
@@ -176,16 +184,19 @@ view: user_adapter {
   dimension: employee_number {
     type: string
     sql: ${TABLE}.employee_number ;;
+    hidden: yes
   }
 
   dimension: extension {
     type: string
     sql: ${TABLE}.extension ;;
+    hidden: yes
   }
 
   dimension: fax {
     type: string
     sql: ${TABLE}.fax ;;
+    hidden: yes
   }
 
   dimension: federation_identifier {
@@ -202,6 +213,7 @@ view: user_adapter {
   dimension: forecast_enabled {
     type: yesno
     sql: ${TABLE}.forecast_enabled ;;
+    hidden: yes
   }
 
   dimension: full_photo_url {
@@ -320,11 +332,13 @@ view: user_adapter {
       year
     ]
     sql: ${TABLE}.last_viewed_date ;;
+    hidden: yes
   }
 
   dimension: latitude {
     type: number
     sql: ${TABLE}.latitude ;;
+    hidden: yes
   }
 
   dimension: locale_sid_key {
@@ -336,6 +350,7 @@ view: user_adapter {
   dimension: longitude {
     type: number
     sql: ${TABLE}.longitude ;;
+    hidden: yes
   }
 
   dimension: manager_id {
@@ -347,6 +362,7 @@ view: user_adapter {
   dimension: mobile_phone {
     type: string
     sql: ${TABLE}.mobile_phone ;;
+    hidden: yes
   }
 
   dimension: name {
@@ -366,6 +382,7 @@ view: user_adapter {
       year
     ]
     sql: ${TABLE}.offline_pda_trial_expiration_date ;;
+    hidden: yes
   }
 
   dimension_group: offline_trial_expiration {
@@ -380,16 +397,19 @@ view: user_adapter {
       year
     ]
     sql: ${TABLE}.offline_trial_expiration_date ;;
+    hidden: yes
   }
 
   dimension: phone {
     type: string
     sql: ${TABLE}.phone ;;
+    hidden: yes
   }
 
   dimension: postal_code {
     type: string
     sql: ${TABLE}.postal_code ;;
+    hidden: yes
   }
 
   dimension: profile_id {
@@ -413,31 +433,37 @@ view: user_adapter {
   dimension: sender_email {
     type: string
     sql: ${TABLE}.sender_email ;;
+    hidden: yes
   }
 
   dimension: sender_name {
     type: string
     sql: ${TABLE}.sender_name ;;
+    hidden: yes
   }
 
   dimension: signature {
     type: string
     sql: ${TABLE}.signature ;;
+    hidden: yes
   }
 
   dimension: small_photo_url {
     type: string
     sql: ${TABLE}.small_photo_url ;;
+    hidden: yes
   }
 
   dimension: state {
     type: string
     sql: ${TABLE}.state ;;
+    hidden: yes
   }
 
   dimension: street {
     type: string
     sql: ${TABLE}.street ;;
+    hidden: yes
   }
 
 
@@ -461,6 +487,7 @@ view: user_adapter {
   dimension: username {
     type: string
     sql: ${TABLE}.username ;;
+    hidden: yes
   }
 
   measure: count {
