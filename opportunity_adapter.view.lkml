@@ -81,6 +81,7 @@ view: opportunity_adapter {
 
   dimension: fiscal {
     type: string
+    hidden: yes
     sql: ${TABLE}.fiscal ;;
   }
 
