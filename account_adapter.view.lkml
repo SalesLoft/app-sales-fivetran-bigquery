@@ -167,6 +167,7 @@ view: account_adapter {
   dimension: is_deleted {
     type: yesno
     sql: ${TABLE}.is_deleted ;;
+    group_label: "Status"
   }
 
   dimension: jigsaw {

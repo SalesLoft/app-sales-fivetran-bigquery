@@ -9,6 +9,7 @@ view: campaign_adapter {
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
+    hidden: yes
   }
 
   dimension_group: _fivetran_synced {
@@ -29,31 +30,37 @@ view: campaign_adapter {
   dimension: actual_cost {
     type: number
     sql: ${TABLE}.actual_cost ;;
+    hidden: yes
   }
 
   dimension: amount_all_opportunities {
     type: number
     sql: ${TABLE}.amount_all_opportunities ;;
+    hidden: yes
   }
 
   dimension: amount_won_opportunities {
     type: number
     sql: ${TABLE}.amount_won_opportunities ;;
+    hidden: yes
   }
 
   dimension: budgeted_cost {
     type: number
     sql: ${TABLE}.budgeted_cost ;;
+    hidden: yes
   }
 
   dimension: campaign_member_record_type_id {
     type: string
     sql: ${TABLE}.campaign_member_record_type_id ;;
+    hidden: yes
   }
 
   dimension: created_by_id {
     type: string
     sql: ${TABLE}.created_by_id ;;
+    hidden: yes
   }
 
   dimension_group: created {
@@ -92,11 +99,13 @@ view: campaign_adapter {
   dimension: expected_response {
     type: number
     sql: ${TABLE}.expected_response ;;
+    hidden: yes
   }
 
   dimension: expected_revenue {
     type: number
     sql: ${TABLE}.expected_revenue ;;
+    hidden: yes
   }
 
   dimension: is_active {
@@ -111,6 +120,7 @@ view: campaign_adapter {
 
   dimension_group: last_activity {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -125,6 +135,7 @@ view: campaign_adapter {
 
   dimension_group: last_modified {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -139,6 +150,7 @@ view: campaign_adapter {
 
   dimension_group: last_referenced {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -153,6 +165,7 @@ view: campaign_adapter {
 
   dimension_group: last_viewed {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -173,36 +186,43 @@ view: campaign_adapter {
   dimension: number_of_contacts {
     type: number
     sql: ${TABLE}.number_of_contacts ;;
+    hidden: yes
   }
 
   dimension: number_of_converted_leads {
     type: number
     sql: ${TABLE}.number_of_converted_leads ;;
+    hidden: yes
   }
 
   dimension: number_of_leads {
     type: number
     sql: ${TABLE}.number_of_leads ;;
+    hidden:  yes
   }
 
   dimension: number_of_opportunities {
     type: number
     sql: ${TABLE}.number_of_opportunities ;;
+    hidden: yes
   }
 
   dimension: number_of_responses {
     type: number
     sql: ${TABLE}.number_of_responses ;;
+    hidden: yes
   }
 
   dimension: number_of_won_opportunities {
     type: number
     sql: ${TABLE}.number_of_won_opportunities ;;
+    hidden: yes
   }
 
   dimension: number_sent {
     type: number
     sql: ${TABLE}.number_sent ;;
+    hidden: yes
   }
 
   dimension: parent_id {
@@ -253,6 +273,42 @@ view: campaign_adapter {
   measure: count {
     type: count
     drill_fields: [id, name, opportunity.count]
+  }
+
+  measure: total_number_of_won_opportunities {
+    type: sum
+    sql: ${number_of_won_opportunities} ;;
+  }
+
+  measure: total_number_sent {
+    type: sum
+    sql: ${number_sent} ;;
+  }
+
+  measure: total_number_of_responses {
+    type: sum
+    sql: ${number_of_responses} ;;
+  }
+
+  measure: total_number_of_leads {
+    type: sum
+    sql: ${number_of_leads} ;;
+  }
+
+  measure: total_number_of_converted_leads {
+    type: sum
+    sql: ${number_of_converted_leads} ;;
+  }
+
+  measure: total_number_of_contacts {
+    type: sum
+    sql: ${number_of_contacts} ;;
+  }
+
+  measure: total_cost {
+    type: sum
+    sql: ${actual_cost} ;;
+    value_format_name: usd
   }
 
   dimension: owner_id {

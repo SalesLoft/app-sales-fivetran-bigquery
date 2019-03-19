@@ -6,6 +6,7 @@ view: user_adapter {
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
+    hidden: yes
   }
 
   dimension_group: age  {
@@ -219,6 +220,7 @@ view: user_adapter {
   dimension: full_photo_url {
     type: string
     sql: ${TABLE}.full_photo_url ;;
+    hidden: yes
   }
 
   dimension: geocode_accuracy {
@@ -273,6 +275,7 @@ view: user_adapter {
 
   dimension_group: last_modified {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,

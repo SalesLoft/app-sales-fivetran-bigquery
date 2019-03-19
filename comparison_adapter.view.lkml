@@ -14,27 +14,18 @@ view: user_age {
     derived_column: age_at_close {sql: date_diff(cast(close_date as date),cast(owner_created_date as date), MONTH) ;;}
   }
 }
-dimension: owner_id {type: string hidden: yes}
-dimension: opportunity_id {type: string}
-dimension: amount {type: number}
-dimension_group: close_date {type: time}
-dimension_group: opp_created_date {type: time}
-dimension_group: owner_created_date {type: time}
-dimension: age_at_close_base {sql: ${TABLE}.age_at_close - ${quota.quota_effective_date_offset};; hidden: yes}
-dimension: age_at_close {
-  label: "Age at Close (Months)"
-  description: "Age at time of close in months"
-  type: number
-  sql: CASE WHEN ${age_at_close_base} < 0 THEN NULL
-              ELSE ${age_at_close_base}
-              END
-        ;;}
-measure: total_amount {type: sum}
-dimension: age_at_close_tier {
-  type: tier
-  tiers: [10,20,30,40,50,60,70]
-  sql: ${age_at_close} ;;
-}
+  dimension: owner_id {type: string hidden: yes}
+  dimension: opportunity_id {type: string hidden: yes}
+  dimension: amount {type: number hidden: yes}
+  dimension_group: close_date { type: time hidden: yes}
+  dimension_group: opp_created_date {type: time hidden: yes}
+  dimension_group: owner_created_date {type: time hidden: yes}
+  dimension: age_at_close_base { sql: ${TABLE}.age_at_close - ${quota.quota_effective_date_offset};; hidden: yes}
+  dimension: age_at_close {label: "Age at Close (Months)" description: "Age at time of close in months" type: number
+    sql: CASE WHEN ${age_at_close_base} < 0 THEN NULL ELSE ${age_at_close_base} END ;;}
+  measure: total_amount {type: sum}
+  dimension: age_at_close_tier {type: tier tiers: [10,20,30,40,50,60,70] sql: ${age_at_close} ;;}
+
 }
 
 
@@ -49,11 +40,10 @@ view: aggregate_comparison {
     column: win_percentage {}
   }
   }
-  dimension: aggregate_average_new_deal_size {sql: ${TABLE}.average_new_deal_size ;;}
-  dimension: aggregate_average_days_to_closed_won {sql: ${TABLE}.average_days_to_closed_won ;;}
-  dimension: aggregate_win_percentage_agg {sql: ${TABLE}.win_percentage ;;}
+  dimension: aggregate_average_new_deal_size {sql: ${TABLE}.average_new_deal_size ;; hidden: yes}
+  dimension: aggregate_average_days_to_closed_won {sql: ${TABLE}.average_days_to_closed_won ;; hidden:  yes}
+  dimension: aggregate_win_percentage_agg {sql: ${TABLE}.win_percentage ;; hidden: yes}
 }
-
 
 view: total_amount_comparison {
   derived_table: {
@@ -63,20 +53,20 @@ view: total_amount_comparison {
     filters: {field: user_age.age_at_close value: "<18"}
     filters: {field: opportunity.is_included_in_quota value: "Yes"}
     column: owner_id {}
-    column: total_closed_won_new_business_amount {}
+    column: total_closed_won_new_business_amount {
+    }
     derived_column: total_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
     derived_column: total_amount_bottom_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .3333 ) OVER () ;;}
     derived_column: total_amount_top_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .6666 ) OVER () ;;}
     }
   }
   dimension: owner_id {type: string hidden: yes}
-  dimension: total_amount_rank {type: number}
-  dimension: total_closed_won_new_business_amount {type: number}
-  dimension:  total_amount_cohort {
-      sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
-                  WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
-                  WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third'
-              END ;;}
+  dimension: total_amount_rank {view_label: "Opportunity Owner" group_label: "Ranking" type: number}
+  dimension: total_closed_won_new_business_amount {type: number hidden: yes}
+  dimension:  total_amount_cohort { label: "Total Amount Cohort Comparitor" hidden: yes
+  sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
+      WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
+      WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third' END ;;}
 }
 
 view: sales_cycle_comparison {
@@ -100,17 +90,15 @@ view: sales_cycle_comparison {
       derived_column: cycle_top_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string hidden: yes }
-  dimension: cycle_rank {type: number}
-  dimension: average_days_to_closed_won {type: number}
-  dimension: cycle_cohort {
-    sql:   CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Bottom Third'
-                WHEN ${average_days_to_closed_won} < cycle_top_third AND ${average_days_to_closed_won} > cycle_bottom_third THEN 'Middle Third'
-                WHEN ${average_days_to_closed_won} < cycle_bottom_third THEN 'Top Third'
-            END ;;}
-  dimension: sales_cycle_cohort_comparitor {
-    type: string
-    sql: CASE
+  dimension: owner_id {type: string hidden: yes}
+  dimension: cycle_rank {type: number view_label: "Opportunity Owner" group_label: "Ranking"}
+  dimension: average_days_to_closed_won {type: number hidden: yes}
+  dimension: cycle_cohort {view_label: "Opportunity Owner" group_label: "Ranking"
+  sql:CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Bottom Third'
+           WHEN ${average_days_to_closed_won} < cycle_top_third AND ${average_days_to_closed_won} > cycle_bottom_third THEN 'Middle Third'
+           WHEN ${average_days_to_closed_won} < cycle_bottom_third THEN 'Top Third'END ;;}
+  dimension: sales_cycle_cohort_comparitor {label: "Cycle Cohort Comparitor" type: string hidden: yes
+    sql:CASE
         WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
           THEN concat("    ",${opportunity_owner.name})
         WHEN ${cycle_cohort} = 'Top Third' THEN concat("   ",${cycle_cohort})
@@ -161,7 +149,6 @@ view: sales_cycle_comparison_current {
         END
        ;;
   }
-
 }
 
 
@@ -185,16 +172,14 @@ view: new_deal_size_comparison {
     }
   }
   dimension: owner_id {type: string hidden: yes}
-  dimension: deal_size_rank {type: number}
-  dimension: average_new_deal_size {}
-  dimension: deal_size_cohort  {
+  dimension: deal_size_rank {type: number view_label: "Opportunity Owner" group_label: "Ranking"}
+  dimension: average_new_deal_size {type: number hidden: yes}
+  dimension: deal_size_cohort  {view_label: "Opportunity Owner" group_label: "Ranking"
     sql: CASE WHEN ${average_new_deal_size} > deal_size_top_third THEN 'Top Third'
               WHEN ${average_new_deal_size} < deal_size_top_third AND ${average_new_deal_size} > deal_size_bottom_third THEN 'Middle Third'
               WHEN ${average_new_deal_size} < deal_size_bottom_third THEN 'Bottom Third'
           END ;;}
-
-  dimension: deal_size_cohort_comparitor {
-    type: string
+  dimension: deal_size_cohort_comparitor {type: string hidden: yes
     sql: CASE
         WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
           THEN concat(" ",${opportunity_owner.name})
@@ -203,6 +188,7 @@ view: new_deal_size_comparison {
        ;;
   }
 }
+
 
 view: new_deal_size_comparison_current {
   derived_table: {
@@ -264,25 +250,22 @@ view: win_percentage_comparison {
     }
   }
   dimension: owner_id {type: string hidden: yes}
-  dimension: win_percentage {
-    type: number
-    value_format_name: percent_2
-  }
-  dimension: win_percentage_rank {type: number}
-  dimension: win_percentage_cohort {
-    sql: CASE WHEN ${win_percentage} > win_percentage_top_third THEN 'Top Third'
+  dimension: win_percentage {type: number value_format_name: percent_2 hidden: yes}
+
+  dimension: win_percentage_rank {type: number view_label: "Opportunity Owner" group_label: "Ranking"}
+
+  dimension: win_percentage_cohort {view_label: "Opportunity Owner" group_label: "Ranking"
+    sql:CASE WHEN ${win_percentage} > win_percentage_top_third THEN 'Top Third'
               WHEN ${win_percentage} < win_percentage_top_third AND ${win_percentage} > win_percentage_bottom_third THEN 'Middle Third'
-              WHEN ${win_percentage} < win_percentage_bottom_third THEN 'Bottom Third'
-          END
-      ;;}
-  dimension: win_percentage_cohort_comparitor {
-    type: string
-    sql: CASE
-        WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
+              WHEN ${win_percentage} < win_percentage_bottom_third THEN 'Bottom Third' END ;;}
+
+  dimension: win_percentage_cohort_comparitor {type: string  hidden: yes
+    sql: CASE WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
           THEN concat(" ",${opportunity_owner.name})
         ELSE ${win_percentage_cohort}
         END
        ;; }
+
 }
 
 view: win_percentage_comparison_current {
