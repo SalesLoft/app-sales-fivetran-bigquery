@@ -49,9 +49,20 @@ view: aggregate_comparison {
     column: win_percentage {}
   }
   }
-  dimension: aggregate_average_new_deal_size {sql: ${TABLE}.average_new_deal_size ;;}
-  dimension: aggregate_average_days_to_closed_won {sql: ${TABLE}.average_days_to_closed_won ;;}
-  dimension: aggregate_win_percentage_agg {sql: ${TABLE}.win_percentage ;;}
+  dimension: aggregate_average_new_deal_size {
+    sql: ${TABLE}.average_new_deal_size ;;
+    hidden: yes
+  }
+
+  dimension: aggregate_average_days_to_closed_won {
+    sql: ${TABLE}.average_days_to_closed_won ;;
+    hidden:  yes
+  }
+
+  dimension: aggregate_win_percentage_agg {
+    sql: ${TABLE}.win_percentage ;;
+    hidden: yes
+  }
 }
 
 
@@ -63,20 +74,36 @@ view: total_amount_comparison {
     filters: {field: user_age.age_at_close value: "<18"}
     filters: {field: opportunity.is_included_in_quota value: "Yes"}
     column: owner_id {}
-    column: total_closed_won_new_business_amount {}
+    column: total_closed_won_new_business_amount {
+    }
     derived_column: total_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
     derived_column: total_amount_bottom_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .3333 ) OVER () ;;}
     derived_column: total_amount_top_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string hidden: yes}
-  dimension: total_amount_rank {type: number}
-  dimension: total_closed_won_new_business_amount {type: number}
+
+  dimension: owner_id {
+    type: string
+    hidden: yes
+  }
+
+  dimension: total_amount_rank {
+    type: number
+  }
+
+  dimension: total_closed_won_new_business_amount {
+    type: number
+    hidden: yes
+  }
+
   dimension:  total_amount_cohort {
-      sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
-                  WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
-                  WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third'
-              END ;;}
+    label: "Total Amount Cohort Comparitor"
+      sql:
+        CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
+             WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
+             WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third'
+        END ;;
+  }
 }
 
 view: sales_cycle_comparison {
@@ -101,24 +128,39 @@ view: sales_cycle_comparison {
       derived_column: cycle_top_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string hidden: yes }
-  dimension: cycle_rank {type: number}
-  dimension: average_days_to_closed_won {type: number}
-  dimension: cycle_cohort {
-    sql:   CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Bottom Third'
-                WHEN ${average_days_to_closed_won} < cycle_top_third AND ${average_days_to_closed_won} > cycle_bottom_third THEN 'Middle Third'
-                WHEN ${average_days_to_closed_won} < cycle_bottom_third THEN 'Top Third'
-            END ;;}
-  dimension: sales_cycle_cohort_comparitor {
+  dimension: owner_id {
     type: string
-    sql: CASE
+    hidden: yes
+  }
+
+  dimension: cycle_rank {
+    type: number
+  }
+
+  dimension: average_days_to_closed_won {
+    type: number
+    hidden: yes
+  }
+
+  dimension: cycle_cohort {
+    sql:
+      CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Bottom Third'
+           WHEN ${average_days_to_closed_won} < cycle_top_third AND ${average_days_to_closed_won} > cycle_bottom_third THEN 'Middle Third'
+           WHEN ${average_days_to_closed_won} < cycle_bottom_third THEN 'Top Third'
+      END ;;
+  }
+
+  dimension: sales_cycle_cohort_comparitor {
+    label: "Cycle Cohort Comparitor"
+    type: string
+    sql:
+      CASE
         WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
           THEN concat("    ",${opportunity_owner.name})
         WHEN ${cycle_cohort} = 'Top Third' THEN concat("   ",${cycle_cohort})
         WHEN ${cycle_cohort} = 'Middle Third' THEN concat("  ",${cycle_cohort})
         WHEN ${cycle_cohort} = 'Bottom Third' THEN concat(" ",${cycle_cohort})
-        END
-       ;;
+      END;;
   }
 
 }
@@ -143,9 +185,20 @@ view: new_deal_size_comparison {
       derived_column: deal_size_top_third {sql: percentile_cont( coalesce(average_new_deal_size,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string hidden: yes}
-  dimension: deal_size_rank {type: number}
-  dimension: average_new_deal_size {}
+  dimension: owner_id {
+    type: string
+    hidden: yes
+  }
+
+  dimension: deal_size_rank {
+    type: number
+  }
+
+  dimension: average_new_deal_size {
+    type: number
+    hidden: yes
+  }
+
   dimension: deal_size_cohort  {
     sql: CASE WHEN ${average_new_deal_size} > deal_size_top_third THEN 'Top Third'
               WHEN ${average_new_deal_size} < deal_size_top_third AND ${average_new_deal_size} > deal_size_bottom_third THEN 'Middle Third'
@@ -188,18 +241,30 @@ view: win_percentage_comparison {
       derived_column: win_percentage_top_third {sql: percentile_cont( coalesce(win_percentage,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string hidden: yes}
+  dimension: owner_id {
+    type: string
+    hidden: yes
+  }
+
   dimension: win_percentage {
     type: number
     value_format_name: percent_2
+    hidden: yes
   }
-  dimension: win_percentage_rank {type: number}
+
+  dimension: win_percentage_rank {
+    type: number
+  }
+
   dimension: win_percentage_cohort {
-    sql: CASE WHEN ${win_percentage} > win_percentage_top_third THEN 'Top Third'
+    sql:
+      CASE WHEN ${win_percentage} > win_percentage_top_third THEN 'Top Third'
               WHEN ${win_percentage} < win_percentage_top_third AND ${win_percentage} > win_percentage_bottom_third THEN 'Middle Third'
               WHEN ${win_percentage} < win_percentage_bottom_third THEN 'Bottom Third'
-          END
-      ;;}
+      END
+      ;;
+  }
+
   dimension: win_percentage_cohort_comparitor {
     type: string
     sql: CASE
