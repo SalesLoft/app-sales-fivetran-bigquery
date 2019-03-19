@@ -14,27 +14,61 @@ view: user_age {
     derived_column: age_at_close {sql: date_diff(cast(close_date as date),cast(owner_created_date as date), MONTH) ;;}
   }
 }
-dimension: owner_id {type: string hidden: yes}
-dimension: opportunity_id {type: string}
-dimension: amount {type: number}
-dimension_group: close_date {type: time}
-dimension_group: opp_created_date {type: time}
-dimension_group: owner_created_date {type: time}
-dimension: age_at_close_base {sql: ${TABLE}.age_at_close - ${quota.quota_effective_date_offset};; hidden: yes}
-dimension: age_at_close {
-  label: "Age at Close (Months)"
-  description: "Age at time of close in months"
-  type: number
-  sql: CASE WHEN ${age_at_close_base} < 0 THEN NULL
-              ELSE ${age_at_close_base}
-              END
-        ;;}
-measure: total_amount {type: sum}
-dimension: age_at_close_tier {
-  type: tier
-  tiers: [10,20,30,40,50,60,70]
-  sql: ${age_at_close} ;;
-}
+  dimension: owner_id {
+    type: string
+    hidden: yes
+  }
+
+  dimension: opportunity_id {
+    type: string
+    hidden: yes
+  }
+
+  dimension: amount {
+    type: number
+    hidden: yes
+  }
+
+  dimension_group: close_date {
+    type: time
+    hidden: yes
+  }
+
+  dimension_group: opp_created_date {
+    type: time
+    hidden: yes
+  }
+
+  dimension_group: owner_created_date {
+    type: time
+    hidden: yes
+  }
+
+  dimension: age_at_close_base {
+    sql: ${TABLE}.age_at_close - ${quota.quota_effective_date_offset};;
+    hidden: yes
+  }
+
+  dimension: age_at_close {
+    label: "Age at Close (Months)"
+    description: "Age at time of close in months"
+    type: number
+    sql: CASE WHEN ${age_at_close_base} < 0 THEN NULL
+                ELSE ${age_at_close_base}
+                END
+          ;;
+    }
+
+  measure: total_amount {
+    type: sum
+  }
+
+  dimension: age_at_close_tier {
+    type: tier
+    tiers: [10,20,30,40,50,60,70]
+    sql: ${age_at_close} ;;
+  }
+
 }
 
 
@@ -88,6 +122,8 @@ view: total_amount_comparison {
   }
 
   dimension: total_amount_rank {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
     type: number
   }
 
@@ -98,7 +134,8 @@ view: total_amount_comparison {
 
   dimension:  total_amount_cohort {
     label: "Total Amount Cohort Comparitor"
-      sql:
+    hidden: yes
+    sql:
         CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
              WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
              WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third'
@@ -135,6 +172,8 @@ view: sales_cycle_comparison {
 
   dimension: cycle_rank {
     type: number
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
   }
 
   dimension: average_days_to_closed_won {
@@ -143,6 +182,8 @@ view: sales_cycle_comparison {
   }
 
   dimension: cycle_cohort {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
     sql:
       CASE WHEN ${average_days_to_closed_won} > cycle_top_third THEN 'Bottom Third'
            WHEN ${average_days_to_closed_won} < cycle_top_third AND ${average_days_to_closed_won} > cycle_bottom_third THEN 'Middle Third'
@@ -153,6 +194,7 @@ view: sales_cycle_comparison {
   dimension: sales_cycle_cohort_comparitor {
     label: "Cycle Cohort Comparitor"
     type: string
+    hidden: yes
     sql:
       CASE
         WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
@@ -192,6 +234,8 @@ view: new_deal_size_comparison {
 
   dimension: deal_size_rank {
     type: number
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
   }
 
   dimension: average_new_deal_size {
@@ -200,6 +244,8 @@ view: new_deal_size_comparison {
   }
 
   dimension: deal_size_cohort  {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
     sql: CASE WHEN ${average_new_deal_size} > deal_size_top_third THEN 'Top Third'
               WHEN ${average_new_deal_size} < deal_size_top_third AND ${average_new_deal_size} > deal_size_bottom_third THEN 'Middle Third'
               WHEN ${average_new_deal_size} < deal_size_bottom_third THEN 'Bottom Third'
@@ -213,6 +259,7 @@ view: new_deal_size_comparison {
         ELSE ${deal_size_cohort}
         END
        ;;
+    hidden: yes
 #     case: {when: {sql: {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %};;
 #             label: "{{ opportunity_owner.name_select.parameter_value }}"}
 #           else: "{{ cycle_cohort._value }}"
@@ -254,9 +301,13 @@ view: win_percentage_comparison {
 
   dimension: win_percentage_rank {
     type: number
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
   }
 
   dimension: win_percentage_cohort {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
     sql:
       CASE WHEN ${win_percentage} > win_percentage_top_third THEN 'Top Third'
               WHEN ${win_percentage} < win_percentage_top_third AND ${win_percentage} > win_percentage_bottom_third THEN 'Middle Third'
@@ -273,6 +324,7 @@ view: win_percentage_comparison {
         ELSE ${win_percentage_cohort}
         END
        ;;
+    hidden: yes
 #     case: {when: {sql: {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %};;
 #             label: "{{ opportunity_owner.name_select.parameter_value }}"}
 #           else: "{{ cycle_cohort._value }}"
