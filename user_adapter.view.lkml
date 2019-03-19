@@ -6,6 +6,7 @@ view: user_adapter {
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
+    hidden: yes
   }
 
   dimension_group: age  {
