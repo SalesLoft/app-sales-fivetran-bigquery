@@ -77,6 +77,7 @@ view: opportunity_adapter {
   dimension: expected_revenue {
     type: number
     sql: ${TABLE}.expected_revenue ;;
+    hidden: yes
   }
 
   dimension: fiscal {
@@ -108,40 +109,48 @@ view: opportunity_adapter {
   dimension: has_open_activity {
     type: yesno
     sql: ${TABLE}.has_open_activity ;;
+    group_label: "Status"
   }
 
   dimension: has_opportunity_line_item {
     type: yesno
     sql: ${TABLE}.has_opportunity_line_item ;;
+    group_label: "Status"
   }
 
   dimension: has_overdue_task {
     type: yesno
     sql: ${TABLE}.has_overdue_task ;;
+    group_label: "Status"
   }
 
   dimension: is_closed {
     type: yesno
     sql: ${TABLE}.is_closed ;;
+    group_label: "Status"
   }
 
   dimension: is_deleted {
     type: yesno
     sql: ${TABLE}.is_deleted ;;
+    group_label: "Status"
   }
 
   dimension: is_private {
     type: yesno
     sql: ${TABLE}.is_private ;;
+    hidden: yes
   }
 
   dimension: is_won {
     type: yesno
     sql: ${TABLE}.is_won ;;
+    group_label: "Status"
   }
 
   dimension_group: last_activity {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -162,6 +171,7 @@ view: opportunity_adapter {
 
   dimension_group: last_modified {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -190,6 +200,7 @@ view: opportunity_adapter {
   }
 
   dimension_group: last_viewed {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -231,6 +242,7 @@ view: opportunity_adapter {
   dimension: owner_id {
     type: string
     sql: ${TABLE}.owner_id ;;
+    hidden: yes
   }
 
   dimension: pricebook_2_id {
@@ -242,6 +254,7 @@ view: opportunity_adapter {
   dimension: probability {
     type: number
     sql: ${TABLE}.probability ;;
+    hidden: yes
   }
 
   dimension: source {
@@ -272,6 +285,7 @@ view: opportunity_adapter {
   dimension: total_opportunity_quantity {
     type: number
     sql: ${TABLE}.total_opportunity_quantity ;;
+    hidden: yes
   }
 
   dimension_group: _fivetran_synced {
