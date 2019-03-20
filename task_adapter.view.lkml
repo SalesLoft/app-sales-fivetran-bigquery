@@ -6,10 +6,12 @@ view: task_adapter {
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
+    hidden: yes
   }
 
   dimension_group: _fivetran_synced {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -24,12 +26,13 @@ view: task_adapter {
 
   dimension: account_id {
     type: string
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.account_id ;;
   }
 
   dimension_group: activity {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -44,16 +47,19 @@ view: task_adapter {
 
   dimension: call_disposition {
     type: string
+    hidden: yes
     sql: ${TABLE}.call_disposition ;;
   }
 
   dimension: call_duration_in_seconds {
     type: number
+    hidden: yes
     sql: ${TABLE}.call_duration_in_seconds ;;
   }
 
   dimension: call_object {
     type: string
+    hidden: yes
     sql: ${TABLE}.call_object ;;
   }
 
@@ -64,6 +70,7 @@ view: task_adapter {
 
   dimension: created_by_id {
     type: string
+    hidden: yes
     sql: ${TABLE}.created_by_id ;;
   }
 
@@ -83,6 +90,7 @@ view: task_adapter {
 
   dimension: currency_iso_code {
     type: string
+    hidden: yes
     sql: ${TABLE}.currency_iso_code ;;
   }
 
@@ -113,16 +121,19 @@ view: task_adapter {
 
   dimension: is_reminder_set {
     type: yesno
+    hidden: yes
     sql: ${TABLE}.is_reminder_set ;;
   }
 
   dimension: last_modified_by_id {
     type: string
+    hidden: yes
     sql: ${TABLE}.last_modified_by_id ;;
   }
 
   dimension_group: last_modified {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -142,26 +153,31 @@ view: task_adapter {
 
   dimension: record_type_id {
     type: string
+    hidden: yes
     sql: ${TABLE}.record_type_id ;;
   }
 
   dimension: recurrence_activity_id {
     type: string
+    hidden: yes
     sql: ${TABLE}.recurrence_activity_id ;;
   }
 
   dimension: recurrence_day_of_month {
     type: number
+    hidden: yes
     sql: ${TABLE}.recurrence_day_of_month ;;
   }
 
   dimension: recurrence_day_of_week_mask {
     type: number
+    hidden: yes
     sql: ${TABLE}.recurrence_day_of_week_mask ;;
   }
 
   dimension_group: recurrence_end_date_only {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -176,26 +192,31 @@ view: task_adapter {
 
   dimension: recurrence_instance {
     type: string
+    hidden: yes
     sql: ${TABLE}.recurrence_instance ;;
   }
 
   dimension: recurrence_interval {
     type: number
+    hidden: yes
     sql: ${TABLE}.recurrence_interval ;;
   }
 
   dimension: recurrence_month_of_year {
     type: string
+    hidden: yes
     sql: ${TABLE}.recurrence_month_of_year ;;
   }
 
   dimension: recurrence_regenerated_type {
     type: string
+    hidden: yes
     sql: ${TABLE}.recurrence_regenerated_type ;;
   }
 
   dimension_group: recurrence_start_date_only {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -210,16 +231,19 @@ view: task_adapter {
 
   dimension: recurrence_time_zone_sid_key {
     type: string
+    hidden: yes
     sql: ${TABLE}.recurrence_time_zone_sid_key ;;
   }
 
   dimension: recurrence_type {
     type: string
+    hidden: yes
     sql: ${TABLE}.recurrence_type ;;
   }
 
   dimension_group: reminder_date {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -244,6 +268,7 @@ view: task_adapter {
 
   dimension_group: system_modstamp {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -258,6 +283,7 @@ view: task_adapter {
 
   dimension: task_subtype {
     type: string
+    hidden: yes
     sql: ${TABLE}.task_subtype ;;
   }
 
@@ -268,11 +294,13 @@ view: task_adapter {
 
   dimension: what_id {
     type: string
+    hidden: yes
     sql: ${TABLE}.what_id ;;
   }
 
   dimension: who_id {
     type: string
+    hidden: yes
     sql: ${TABLE}.who_id ;;
   }
 
