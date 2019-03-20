@@ -181,6 +181,9 @@ view: campaign_adapter {
   dimension: name {
     type: string
     sql: ${TABLE}.name ;;
+    html: <a href="https://{{ salesforce_domain_config._sql }}/{{ campaign.id._value }}" target="_new">
+    <img src="https://www.google.com/s2/favicons?domain=www.salesforce.com" height=16 width=16></a>
+    {{ linked_value }};;
   }
 
   dimension: number_of_contacts {
