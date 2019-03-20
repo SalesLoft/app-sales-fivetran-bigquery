@@ -21,7 +21,7 @@ view: user_age {
   dimension_group: opp_created_date {type: time hidden: yes}
   dimension_group: owner_created_date {type: time hidden: yes}
   dimension: age_at_close_base { sql: ${TABLE}.age_at_close - ${quota.quota_effective_date_offset};; hidden: yes}
-  dimension: age_at_close {label: "Age at Close (Months)" description: "Age at time of close in months" type: number
+  dimension: age_at_close {label: "Months from Rep Start Date" description: "Age at time of close in months" type: number
     sql: CASE WHEN ${age_at_close_base} < 0 THEN NULL ELSE ${age_at_close_base} END ;;}
   measure: total_amount {type: sum}
   dimension: age_at_close_tier {type: tier tiers: [10,20,30,40,50,60,70] sql: ${age_at_close} ;;}
