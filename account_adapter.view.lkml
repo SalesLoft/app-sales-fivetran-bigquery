@@ -142,14 +142,14 @@ view: account_adapter {
   dimension: logo64 {
     sql: ${domain} ;;
     html: <a href="https://na9.salesforce.com/{{ opportunity.id._value }}" target="_new">
-      <img src="http://logo.clearbit.com/{{ value }}" height=64 width=64></a>
+      <img src="https://logo.clearbit.com/{{ value }}" height=64 width=64></a>
       ;;
   }
 
   dimension: logo {
     sql: ${domain} ;;
-    html: <a href="http://{{ value }}" target="_new">
-      <img src="http://logo.clearbit.com/{{ value }}" height=128 width=128></a>
+    html: <a href="https://{{ value }}" target="_new">
+      <img src="https://logo.clearbit.com/{{ value }}" height=128 width=128></a>
       ;;
   }
 
