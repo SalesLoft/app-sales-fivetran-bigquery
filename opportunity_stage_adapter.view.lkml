@@ -124,7 +124,7 @@ view: opportunity_stage_adapter {
       quarter,
       year
     ]
-    sql: ${TABLE}._fivetran_synced ;;
+    sql: ${TABLE}._fivetran_synced  ;;
   }
 
   measure: count {
