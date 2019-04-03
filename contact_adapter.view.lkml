@@ -5,28 +5,6 @@ view: contact_adapter {
   extension: required #add this if you re-generate this file
   extends: [contact_schema]
 
-  dimension: jigsaw_contact_id {
-    primary_key: yes
-    type: string
-    hidden:  yes
-    sql: ${TABLE}.jigsaw_contact_id ;;
-  }
-
-  dimension_group: _fivetran_synced {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._fivetran_synced ;;
-    hidden: yes
-  }
-
   dimension: account_id {
     type: string
     hidden: yes
@@ -136,6 +114,7 @@ view: contact_adapter {
   dimension: id {
     type: string
     sql: ${TABLE}.id ;;
+    primary_key: yes
     hidden: yes
   }
 
@@ -148,17 +127,6 @@ view: contact_adapter {
     type: yesno
     sql: ${TABLE}.is_email_bounced ;;
     hidden:  yes
-  }
-
-  dimension: jigsaw {
-    type: string
-    sql: ${TABLE}.jigsaw ;;
-    hidden: yes
-  }
-
-  dimension: languages_c {
-    type: string
-    sql: ${TABLE}.languages_c ;;
   }
 
   dimension_group: last_activity {
@@ -261,11 +229,6 @@ view: contact_adapter {
   dimension: lead_source {
     type: string
     sql: ${TABLE}.lead_source ;;
-  }
-
-  dimension: level_c {
-    type: string
-    sql: ${TABLE}.level_c ;;
   }
 
   dimension: mailing_city {
@@ -414,11 +377,6 @@ view: contact_adapter {
   dimension: title {
     type: string
     sql: ${TABLE}.title ;;
-  }
-
-  measure: count {
-    type: count
-    drill_fields: [detail*]
   }
 
   # ----- Sets of fields for drilling ------
