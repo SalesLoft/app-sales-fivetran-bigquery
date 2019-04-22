@@ -252,16 +252,6 @@ view: account_adapter {
     hidden: yes
   }
 
-#   dimension: naics_code {
-#     type: string
-#     sql: ${TABLE}.naics_code ;;
-#   }
-#
-#   dimension: naics_desc {
-#     type: string
-#     sql: ${TABLE}.naics_desc ;;
-#   }
-
   dimension: name {
     type: string
     sql: ${TABLE}.name ;;
@@ -270,16 +260,11 @@ view: account_adapter {
     {{ linked_value }};;
   }
 
-# changed from number_of_employees; needs string conversion
   dimension: number_of_employees {
-    type: string # changed from number to string since underlying column is string
-    sql: ${TABLE}.number_of_employees_c ;;
+    type: number
+    sql: ${TABLE}.number_of_employees ;;
   }
 
-#   dimension: numberof_locations_c {
-#     type: number
-#     sql: ${TABLE}.numberof_locations_c ;;
-#   }
 
   dimension: owner_id {
     type: string
