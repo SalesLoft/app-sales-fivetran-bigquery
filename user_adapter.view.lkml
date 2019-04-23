@@ -23,15 +23,19 @@ view: user_adapter {
   }
 
   dimension: tenure {
-    label: "Tenure"
-    type: string
-    sql: concat(
-    cast(floor(${months_age}/12) as string)," Years ",
-    cast(floor(mod(${months_age}, 12)) as string)," Months ",
-    cast(date_diff(current_date, DATE_ADD( ${created_date}, INTERVAL cast(floor(${months_age}) as int64) MONTH), DAY) as string)," Days")
-    ;;
-    order_by_field: days_age
+    sql: ${tenure_months} ;;
   }
+
+#   dimension: tenure {
+#     label: "Tenure"
+#     type: string
+#     sql: concat(
+#     cast(floor(${months_age}/12) as string)," Years ",
+#     cast(floor(mod(${months_age}, 12)) as string)," Months ",
+#     cast(date_diff(current_date, DATE_ADD( ${created_date}, INTERVAL cast(floor(${months_age}) as int64) MONTH), DAY) as string)," Days")
+#     ;;
+#     order_by_field: days_age
+#   }
 
   #### How longh does it take an AE to ramp #### default
   dimension: is_ramped {
