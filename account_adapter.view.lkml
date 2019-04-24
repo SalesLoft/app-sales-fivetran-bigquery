@@ -136,7 +136,7 @@ view: account_adapter {
 #   }
 
   dimension: domain {
-    sql: ${TABLE}.domain_c ;;
+    sql: REGEXP_REPLACE(REGEXP_REPLACE(${website},"^https?://",""),"(www2?.)","");;
   }
 
   dimension: logo64 {
