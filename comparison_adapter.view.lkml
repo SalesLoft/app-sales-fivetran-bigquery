@@ -56,8 +56,8 @@ view: total_amount_comparison {
     column: total_closed_won_new_business_amount {
     }
     derived_column: total_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
-    derived_column: total_amount_bottom_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .3333 ) OVER () ;;}
-    derived_column: total_amount_top_third {sql: percentile_cont( coalesce(average_days_to_closed_won,0)*1.00, .6666 ) OVER () ;;}
+    derived_column: total_amount_bottom_third {sql: percentile_cont( coalesce(total_closed_won_new_business_amount,0)*1.00, .3333 ) OVER () ;;}
+    derived_column: total_amount_top_third {sql: percentile_cont( coalesce(total_closed_won_new_business_amount,0)*1.00, .6666 ) OVER () ;;}
     }
   }
   dimension: owner_id {type: string hidden: yes}
