@@ -55,18 +55,54 @@ view: total_amount_comparison {
     column: owner_id {}
     column: total_closed_won_new_business_amount {
     }
-    derived_column: total_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
+    derived_column: all_time_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
     derived_column: total_amount_bottom_third {sql: percentile_cont( coalesce(total_closed_won_new_business_amount,0)*1.00, .3333 ) OVER () ;;}
     derived_column: total_amount_top_third {sql: percentile_cont( coalesce(total_closed_won_new_business_amount,0)*1.00, .6666 ) OVER () ;;}
     }
   }
   dimension: owner_id {type: string hidden: yes}
-  dimension: total_amount_rank {view_label: "Opportunity Owner" group_label: "Ranking" type: number}
+  dimension: all_time_amount_rank {view_label: "Opportunity Owner" group_label: "Ranking" type: number}
   dimension: total_closed_won_new_business_amount {type: number hidden: yes}
   dimension:  total_amount_cohort { label: "Total Amount Cohort Comparitor" hidden: yes
   sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
       WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
       WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third' END ;;}
+}
+
+view: qtd_amount_comparison {
+  derived_table: {
+    explore_source: opportunity {
+      filters: {field: opportunity.is_won value: "Yes"}
+      filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
+      filters: {field: user_age.age_at_close value: "<18"}
+      filters: {field: opportunity.is_included_in_quota value: "Yes"}
+      filters: {field: opportunity.close_date value: "this quarter"}
+      column: owner_id {}
+      column: total_closed_won_new_business_amount {
+      }
+      derived_column: qtd_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
+    }
+  }
+  dimension: owner_id {type: string hidden: yes}
+  dimension: qtd_amount_rank {view_label: "Opportunity Owner" group_label: "Ranking" type: number}
+}
+
+view: ytd_amount_comparison {
+  derived_table: {
+    explore_source: opportunity {
+      filters: {field: opportunity.is_won value: "Yes"}
+      filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
+      filters: {field: user_age.age_at_close value: "<18"}
+      filters: {field: opportunity.is_included_in_quota value: "Yes"}
+      filters: {field: opportunity.close_date value: "this year"}
+      column: owner_id {}
+      column: total_closed_won_new_business_amount {
+      }
+      derived_column: ytd_amount_rank {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
+    }
+  }
+  dimension: owner_id {type: string hidden: yes}
+  dimension: ytd_amount_rank {view_label: "Opportunity Owner" group_label: "Ranking" type: number}
 }
 
 view: sales_cycle_comparison {
