@@ -61,7 +61,24 @@ view: total_amount_comparison {
     }
   }
   dimension: owner_id {type: string hidden: yes}
-  dimension: all_time_amount_rank {view_label: "Opportunity Owner" group_label: "Ranking" type: number}
+  dimension: all_time_amount_rank {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
+    type: string
+    sql: CONCAT(CAST(${TABLE}.all_time_amount_rank AS STRING),
+      CASE WHEN
+        mod(${TABLE}.all_time_amount_rank,100) > 10 AND mod(${TABLE}.all_time_amount_rank,100) <= 20 THEN "th"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank,10) = 1 THEN "st"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank,10) = 2 THEN "nd"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;
+    }
   dimension: total_closed_won_new_business_amount {type: number hidden: yes}
   dimension:  total_amount_cohort { label: "Total Amount Cohort Comparitor" hidden: yes
   sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
@@ -75,7 +92,7 @@ view: qtd_amount_comparison {
       filters: {field: opportunity.is_won value: "Yes"}
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity.is_included_in_quota value: "Yes"}
-      filters: {field: opportunity.close_date value: "this quarter"}
+      filters: {field: opportunity.close_date value: "this fiscal quarter"}
       column: owner_id {}
       column: total_closed_won_new_business_amount {
       }
@@ -83,7 +100,24 @@ view: qtd_amount_comparison {
     }
   }
   dimension: owner_id {type: string hidden: yes}
-  dimension: qtd_amount_rank {view_label: "Opportunity Owner" group_label: "Ranking" type: number}
+  dimension: qtd_amount_rank {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
+    type: string
+    sql: CONCAT(CAST(${TABLE}.qtd_amount_rank AS STRING),
+      CASE WHEN
+        mod(${TABLE}.qtd_amount_rank,100) > 10 AND mod(${TABLE}.qtd_amount_rank,100) <= 20 THEN "th"
+      WHEN
+        mod(${TABLE}.qtd_amount_rank,10) = 1 THEN "st"
+      WHEN
+        mod(${TABLE}.qtd_amount_rank,10) = 2 THEN "nd"
+      WHEN
+        mod(${TABLE}.qtd_amount_rank,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;
+    }
 }
 
 view: ytd_amount_comparison {
@@ -92,7 +126,7 @@ view: ytd_amount_comparison {
       filters: {field: opportunity.is_won value: "Yes"}
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity.is_included_in_quota value: "Yes"}
-      filters: {field: opportunity.close_date value: "this year"}
+      filters: {field: opportunity.close_date value: "this fiscal year"}
       column: owner_id {}
       column: total_closed_won_new_business_amount {
       }
@@ -100,7 +134,23 @@ view: ytd_amount_comparison {
     }
   }
   dimension: owner_id {type: string hidden: yes}
-  dimension: ytd_amount_rank {view_label: "Opportunity Owner" group_label: "Ranking" type: number}
+  dimension: ytd_amount_rank {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
+    type: string
+    sql: CONCAT(CAST(${TABLE}.ytd_amount_rank AS STRING),
+      CASE WHEN
+        mod(${TABLE}.ytd_amount_rank,100) > 10 AND mod(${TABLE}.ytd_amount_rank,100) <= 20 THEN "th"
+      WHEN
+        mod(${TABLE}.ytd_amount_rank,10) = 1 THEN "st"
+      WHEN
+        mod(${TABLE}.ytd_amount_rank,10) = 2 THEN "nd"
+      WHEN
+        mod(${TABLE}.ytd_amount_rank,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;}
 }
 
 view: sales_cycle_comparison {
@@ -245,6 +295,27 @@ view: new_deal_size_comparison_current {
   }
   dimension: owner_id {type: string hidden: yes}
   dimension: deal_size_rank_current {type: number}
+  dimension: deal_size_rank_formatted {
+    type: string
+    view_label: "Opportunity Owner"
+    hidden:  yes
+    group_label: "Ranking"
+    sql:
+      CONCAT(CAST(${TABLE}.deal_size_rank_current AS STRING),
+      CASE WHEN
+      mod(${TABLE}.deal_size_rank_current,100) > 10 AND mod(${TABLE}.deal_size_rank_current,100) <= 20 THEN "th"
+      WHEN
+      mod(${TABLE}.deal_size_rank_current,10) = 1 THEN "st"
+      WHEN
+      mod(${TABLE}.deal_size_rank_current,10) = 2 THEN "nd"
+      WHEN
+      mod(${TABLE}.deal_size_rank_current,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;
+  }
+
   dimension: average_new_deal_size_current {sql: ${TABLE}.average_new_deal_size;;}
   dimension: deal_size_cohort_current  {
     sql: CASE WHEN ${average_new_deal_size_current} > deal_size_top_third_current THEN 'Top Third'
@@ -287,6 +358,28 @@ view: win_percentage_comparison {
   dimension: win_percentage {type: number value_format_name: percent_2 hidden: yes}
 
   dimension: win_percentage_rank {type: number view_label: "Opportunity Owner" group_label: "Ranking"}
+
+  dimension: win_percentage_rank_formatted {
+    type: string
+    view_label: "Opportunity Owner"
+    hidden:  yes
+    group_label: "Ranking"
+    sql:
+      CONCAT(CAST(${TABLE}.win_percentage_rank AS STRING),
+      CASE WHEN
+      mod(${TABLE}.win_percentage_rank,100) > 10 AND mod(${TABLE}.win_percentage_rank,100) <= 20 THEN "th"
+      WHEN
+      mod(${TABLE}.win_percentage_rank,10) = 1 THEN "st"
+      WHEN
+      mod(${TABLE}.win_percentage_rank,10) = 2 THEN "nd"
+      WHEN
+      mod(${TABLE}.win_percentage_rank,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;
+  }
+
 
   dimension: win_percentage_cohort {view_label: "Opportunity Owner" group_label: "Ranking"
     sql:CASE WHEN ${win_percentage} > win_percentage_top_third THEN 'Top Third'
