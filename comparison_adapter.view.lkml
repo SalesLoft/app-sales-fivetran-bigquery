@@ -74,7 +74,6 @@ view: qtd_amount_comparison {
     explore_source: opportunity {
       filters: {field: opportunity.is_won value: "Yes"}
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
-      filters: {field: user_age.age_at_close value: "<18"}
       filters: {field: opportunity.is_included_in_quota value: "Yes"}
       filters: {field: opportunity.close_date value: "this quarter"}
       column: owner_id {}
@@ -92,7 +91,6 @@ view: ytd_amount_comparison {
     explore_source: opportunity {
       filters: {field: opportunity.is_won value: "Yes"}
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
-      filters: {field: user_age.age_at_close value: "<18"}
       filters: {field: opportunity.is_included_in_quota value: "Yes"}
       filters: {field: opportunity.close_date value: "this year"}
       column: owner_id {}
