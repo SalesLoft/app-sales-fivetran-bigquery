@@ -37,9 +37,9 @@ view: opportunity_adapter {
 
   dimension_group: close {
     type: time
+    datatype: date
     timeframes: [
       raw,
-      time,
       date,
       week,
       month,
@@ -50,7 +50,7 @@ view: opportunity_adapter {
       fiscal_quarter_of_year,
       fiscal_year
     ]
-    sql: ${TABLE}.close_date ;;
+    sql: DATE(${TABLE}.close_date) ;;
   }
 
   dimension: created_by_id {
