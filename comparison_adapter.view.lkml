@@ -1,9 +1,9 @@
 
 # explore: user_age {}
+# Determines user age at time of close. For comparing the first months of the Reps career
 view: user_age {
   derived_table: {
     explore_source: opportunity {
-#       filters: {field: opportunity.is_won  value: "Yes"}
     filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
     filters: {field: opportunity.is_included_in_quota value: "yes"}
     column: owner_id {}
@@ -28,13 +28,12 @@ view: user_age {
 
 }
 
-
+# Ungrouped aggregates
 view: aggregate_comparison {
   derived_table: {
     explore_source: opportunity {
     filters: {field: opportunity_owner.is_sales_rep value: "yes"}
     filters: {field: opportunity.is_included_in_quota value: "yes"}
-#     filters: {field: opportunity.close_date value: "18 Months"}
     column: average_new_deal_size {}
     column: average_days_to_closed_won {}
     column: win_percentage {}
@@ -45,6 +44,7 @@ view: aggregate_comparison {
   dimension: aggregate_win_percentage_agg {sql: ${TABLE}.win_percentage ;; hidden: yes}
 }
 
+# Ramping
 view: total_amount_comparison {
   derived_table: {
     explore_source: opportunity {
