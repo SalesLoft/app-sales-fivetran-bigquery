@@ -86,6 +86,7 @@ view: total_amount_comparison {
       WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third' END ;;}
 }
 
+# Ramping
 view: qtd_amount_comparison {
   derived_table: {
     explore_source: opportunity {
@@ -120,6 +121,7 @@ view: qtd_amount_comparison {
     }
 }
 
+# Ramping
 view: ytd_amount_comparison {
   derived_table: {
     explore_source: opportunity {
@@ -153,6 +155,7 @@ view: ytd_amount_comparison {
       );;}
 }
 
+# Ramping
 view: sales_cycle_comparison {
   derived_table: {
     explore_source: opportunity {
@@ -194,6 +197,7 @@ view: sales_cycle_comparison {
 
 }
 
+# Leaderboard
 view: sales_cycle_comparison_current {
   derived_table: {
     explore_source: opportunity {
@@ -235,7 +239,7 @@ view: sales_cycle_comparison_current {
   }
 }
 
-
+# Ramping
 view: new_deal_size_comparison {
   derived_table: {
     explore_source: opportunity {
@@ -273,7 +277,7 @@ view: new_deal_size_comparison {
   }
 }
 
-
+# Leaderboard
 view: new_deal_size_comparison_current {
   derived_table: {
     explore_source: opportunity {
@@ -334,7 +338,7 @@ view: new_deal_size_comparison_current {
       }
     }
 
-
+# Ramping
 view: win_percentage_comparison {
   derived_table: {
     explore_source: opportunity {
@@ -395,6 +399,7 @@ view: win_percentage_comparison {
 
 }
 
+# Leaderboard
 view: win_percentage_comparison_current {
   derived_table: {
     explore_source: opportunity {
@@ -437,7 +442,7 @@ view: win_percentage_comparison_current {
        ;; }
 }
 
-#
+# Ramping
 # view: pipeline_comparison {
 #   derived_table: {
 #     explore_source: opportunity_snapshots {
