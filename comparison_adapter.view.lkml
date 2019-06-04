@@ -50,7 +50,7 @@ view: total_amount_comparison {
     explore_source: opportunity {
     filters: {field: opportunity.is_won value: "Yes"}
     filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
-    filters: {field: user_age.age_at_close value: "<18"}
+#     filters: {field: user_age.age_at_close value: "<18"}
     filters: {field: opportunity.is_included_in_quota value: "Yes"}
     column: owner_id {}
     column: total_closed_won_new_business_amount {
@@ -80,8 +80,48 @@ view: total_amount_comparison {
       );;
     }
   dimension: total_closed_won_new_business_amount {type: number hidden: yes}
-  dimension:  total_amount_cohort { label: "Total Amount Cohort Comparitor" hidden: yes
+  dimension: total_amount_cohort { label: "Total Amount Cohort Comparitor" hidden: yes
   sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
+      WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
+      WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third' END ;;}
+}
+
+# Leaderboard
+view: total_amount_comparison_current {
+  derived_table: {
+    explore_source: opportunity {
+      filters: {field: opportunity.is_won value: "Yes"}
+      filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
+      filters: {field: opportunity.is_included_in_quota value: "Yes"}
+      column: owner_id {}
+      column: total_closed_won_new_business_amount {}
+      derived_column: all_time_amount_rank_current {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
+      derived_column: total_amount_bottom_third_current {sql: percentile_cont( coalesce(total_closed_won_new_business_amount,0)*1.00, .3333 ) OVER () ;;}
+      derived_column: total_amount_top_third_current {sql: percentile_cont( coalesce(total_closed_won_new_business_amount,0)*1.00, .6666 ) OVER () ;;}
+    }
+  }
+  dimension: owner_id {type: string hidden: yes}
+  dimension: total_closed_won_new_business_amount {type: number hidden: yes}
+  dimension: all_time_amount_rank_current {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
+    type: string
+    sql: CONCAT(CAST(${TABLE}.all_time_amount_rank AS STRING),
+      CASE WHEN
+        mod(${TABLE}.all_time_amount_rank,100) > 10 AND mod(${TABLE}.all_time_amount_rank,100) <= 20 THEN "th"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank,10) = 1 THEN "st"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank,10) = 2 THEN "nd"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;
+  }
+  dimension: total_amount_cohort_current { label: "Total Amount Cohort Comparitor" hidden: yes
+    sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
       WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
       WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third' END ;;}
 }
@@ -302,7 +342,7 @@ view: new_deal_size_comparison_current {
   dimension: deal_size_rank_formatted {
     type: string
     view_label: "Opportunity Owner"
-    hidden:  yes
+#     hidden:  yes
     group_label: "Ranking"
     sql:
       CONCAT(CAST(${TABLE}.deal_size_rank_current AS STRING),
@@ -349,7 +389,7 @@ view: win_percentage_comparison {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: user_age.age_at_close value: "<18"}
-      filters: {field: opportunity.is_included_in_quota value: "yes"}
+      filters: {field: opportunity.is_included_in_quota value: "Yes"}
       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
       column: owner_id {}
       column: win_percentage {}
@@ -419,7 +459,9 @@ view: win_percentage_comparison_current {
       derived_column: win_percentage_top_third_current {sql: percentile_cont( coalesce(win_percentage,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string hidden: yes}
+  dimension: owner_id {type: string
+#     hidden: yes
+}
   dimension: win_percentage_current {
     type: number
     value_format_name: percent_2
