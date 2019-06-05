@@ -446,7 +446,7 @@ view: win_percentage_comparison_current {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.is_included_in_quota value: "yes"}
-      filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
+#       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}  # throws off leaderboard visualizations
       filters: {field: opportunity.close_date value: "18 Months"}
       column: owner_id {}
       column: win_percentage {}
@@ -462,6 +462,25 @@ view: win_percentage_comparison_current {
     sql: ${TABLE}.win_percentage ;;
   }
   dimension: win_percentage_rank_current {type: number}
+  dimension: win_percentage_rank_current_formatted {
+    view_label: "Opportunity Owner"
+    hidden:  yes
+    group_label: "Ranking"
+    sql:
+      CONCAT(CAST(${TABLE}.win_percentage_rank_current AS STRING),
+      CASE WHEN
+      mod(${TABLE}.win_percentage_rank_current,100) > 10 AND mod(${TABLE}.win_percentage_rank_current,100) <= 20 THEN "th"
+      WHEN
+      mod(${TABLE}.win_percentage_rank_current,10) = 1 THEN "st"
+      WHEN
+      mod(${TABLE}.win_percentage_rank_current,10) = 2 THEN "nd"
+      WHEN
+      mod(${TABLE}.win_percentage_rank_current,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;
+  }
   dimension: win_percentage_cohort_current {
     sql: CASE WHEN ${win_percentage_current} > win_percentage_top_third_current THEN 'Top Third'
               WHEN ${win_percentage_current} < win_percentage_top_third_current AND ${win_percentage_current} > win_percentage_bottom_third_current THEN 'Middle Third'
