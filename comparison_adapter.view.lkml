@@ -80,8 +80,48 @@ view: total_amount_comparison {
       );;
     }
   dimension: total_closed_won_new_business_amount {type: number hidden: yes}
-  dimension:  total_amount_cohort { label: "Total Amount Cohort Comparitor" hidden: yes
+  dimension: total_amount_cohort { label: "Total Amount Cohort Comparitor" hidden: yes
   sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
+      WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
+      WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third' END ;;}
+}
+
+# Leaderboard
+view: total_amount_comparison_current {
+  derived_table: {
+    explore_source: opportunity {
+      filters: {field: opportunity.is_won value: "Yes"}
+      filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
+      filters: {field: opportunity.is_included_in_quota value: "Yes"}
+      column: owner_id {}
+      column: total_closed_won_new_business_amount {}
+      derived_column: all_time_amount_rank_current {sql: ROW_NUMBER() OVER( ORDER BY total_closed_won_new_business_amount desc);;}
+      derived_column: total_amount_bottom_third_current {sql: percentile_cont( coalesce(total_closed_won_new_business_amount,0)*1.00, .3333 ) OVER () ;;}
+      derived_column: total_amount_top_third_current {sql: percentile_cont( coalesce(total_closed_won_new_business_amount,0)*1.00, .6666 ) OVER () ;;}
+    }
+  }
+  dimension: owner_id {type: string hidden: yes}
+  dimension: total_closed_won_new_business_amount {type: number hidden: yes}
+  dimension: all_time_amount_rank_current {
+    view_label: "Opportunity Owner"
+    group_label: "Ranking"
+    type: string
+    sql: CONCAT(CAST(${TABLE}.all_time_amount_rank_current AS STRING),
+      CASE WHEN
+        mod(${TABLE}.all_time_amount_rank_current,100) > 10 AND mod(${TABLE}.all_time_amount_rank_current,100) <= 20 THEN "th"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank_current,10) = 1 THEN "st"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank_current,10) = 2 THEN "nd"
+      WHEN
+        mod(${TABLE}.all_time_amount_rank_current,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;
+  }
+  dimension: total_amount_cohort_current { label: "Total Amount Cohort Comparitor" hidden: yes
+    sql: CASE WHEN ${total_closed_won_new_business_amount} > cycle_top_third THEN 'Top Third'
       WHEN ${total_closed_won_new_business_amount} < cycle_top_third AND ${total_closed_won_new_business_amount} > cycle_bottom_third THEN 'Middle Third'
       WHEN ${total_closed_won_new_business_amount} < cycle_bottom_third THEN 'Bottom Third' END ;;}
 }
@@ -288,13 +328,13 @@ view: new_deal_size_comparison_current {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.is_included_in_quota value: "Yes"}
-      filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
+#       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"} # throws off leaderboard visualizations
       filters: {field: opportunity.close_date value: "18 months"}
       column: owner_id {}
-      column: average_new_deal_size {}
-      derived_column: deal_size_rank_current {sql: ROW_NUMBER() OVER (ORDER BY average_new_deal_size desc);;}
-      derived_column: deal_size_bottom_third {sql: percentile_cont( coalesce(average_new_deal_size,0)*1.00, .3333 ) OVER () ;;}
-      derived_column: deal_size_top_third_current {sql: percentile_cont( coalesce(average_new_deal_size,0)*1.00, .6666 ) OVER () ;;}
+      column: average_new_deal_size_won {}
+      derived_column: deal_size_rank_current {sql: ROW_NUMBER() OVER (ORDER BY average_new_deal_size_won desc);;}
+      derived_column: deal_size_bottom_third {sql: percentile_cont( coalesce(average_new_deal_size_won,0)*1.00, .3333 ) OVER () ;;}
+      derived_column: deal_size_top_third_current {sql: percentile_cont( coalesce(average_new_deal_size_won,0)*1.00, .6666 ) OVER () ;;}
     }
   }
   dimension: owner_id {type: string hidden: yes}
@@ -302,7 +342,7 @@ view: new_deal_size_comparison_current {
   dimension: deal_size_rank_formatted {
     type: string
     view_label: "Opportunity Owner"
-    hidden:  yes
+#     hidden:  yes
     group_label: "Ranking"
     sql:
       CONCAT(CAST(${TABLE}.deal_size_rank_current AS STRING),
@@ -349,7 +389,7 @@ view: win_percentage_comparison {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: user_age.age_at_close value: "<18"}
-      filters: {field: opportunity.is_included_in_quota value: "yes"}
+      filters: {field: opportunity.is_included_in_quota value: "Yes"}
       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
       column: owner_id {}
       column: win_percentage {}
@@ -358,11 +398,10 @@ view: win_percentage_comparison {
       derived_column: win_percentage_top_third {sql: percentile_cont( coalesce(win_percentage,0)*1.00, .6666 ) OVER () ;;}
     }
   }
+
   dimension: owner_id {type: string hidden: yes}
   dimension: win_percentage {type: number value_format_name: percent_2 hidden: yes}
-
   dimension: win_percentage_rank {type: number view_label: "Opportunity Owner" group_label: "Ranking"}
-
   dimension: win_percentage_rank_formatted {
     type: string
     view_label: "Opportunity Owner"
@@ -383,13 +422,10 @@ view: win_percentage_comparison {
       END
       );;
   }
-
-
   dimension: win_percentage_cohort {view_label: "Opportunity Owner" group_label: "Ranking"
     sql:CASE WHEN ${win_percentage} > win_percentage_top_third THEN 'Top Third'
               WHEN ${win_percentage} < win_percentage_top_third AND ${win_percentage} > win_percentage_bottom_third THEN 'Middle Third'
               WHEN ${win_percentage} < win_percentage_bottom_third THEN 'Bottom Third' END ;;}
-
   dimension: win_percentage_cohort_comparitor {type: string  hidden: yes
     sql: CASE WHEN {% condition opportunity_owner.name_select %} ${opportunity_owner.name} {% endcondition %}
           THEN concat(" ",${opportunity_owner.name})
@@ -410,7 +446,7 @@ view: win_percentage_comparison_current {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.is_included_in_quota value: "yes"}
-      filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
+#       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}  # throws off leaderboard visualizations
       filters: {field: opportunity.close_date value: "18 Months"}
       column: owner_id {}
       column: win_percentage {}
@@ -419,13 +455,32 @@ view: win_percentage_comparison_current {
       derived_column: win_percentage_top_third_current {sql: percentile_cont( coalesce(win_percentage,0)*1.00, .6666 ) OVER () ;;}
     }
   }
-  dimension: owner_id {type: string hidden: yes}
+  dimension: owner_id {type: string hidden: yes }
   dimension: win_percentage_current {
     type: number
     value_format_name: percent_2
     sql: ${TABLE}.win_percentage ;;
   }
   dimension: win_percentage_rank_current {type: number}
+  dimension: win_percentage_rank_current_formatted {
+    view_label: "Opportunity Owner"
+    hidden:  yes
+    group_label: "Ranking"
+    sql:
+      CONCAT(CAST(${TABLE}.win_percentage_rank_current AS STRING),
+      CASE WHEN
+      mod(${TABLE}.win_percentage_rank_current,100) > 10 AND mod(${TABLE}.win_percentage_rank_current,100) <= 20 THEN "th"
+      WHEN
+      mod(${TABLE}.win_percentage_rank_current,10) = 1 THEN "st"
+      WHEN
+      mod(${TABLE}.win_percentage_rank_current,10) = 2 THEN "nd"
+      WHEN
+      mod(${TABLE}.win_percentage_rank_current,10) = 3 THEN "rd"
+      ELSE
+      "th"
+      END
+      );;
+  }
   dimension: win_percentage_cohort_current {
     sql: CASE WHEN ${win_percentage_current} > win_percentage_top_third_current THEN 'Top Third'
               WHEN ${win_percentage_current} < win_percentage_top_third_current AND ${win_percentage_current} > win_percentage_bottom_third_current THEN 'Middle Third'
