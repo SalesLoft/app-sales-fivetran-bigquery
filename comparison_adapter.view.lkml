@@ -328,13 +328,13 @@ view: new_deal_size_comparison_current {
       filters: {field: opportunity_owner.is_sales_rep value: "Yes"}
       filters: {field: opportunity_owner.is_ramped value: "Yes"}
       filters: {field: opportunity.is_included_in_quota value: "Yes"}
-      filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"}
+#       filters: {field: segment_lookup.is_in_same_segment_as_specified_user value: "Yes"} # throws off leaderboard visualizations
       filters: {field: opportunity.close_date value: "18 months"}
       column: owner_id {}
-      column: average_new_deal_size {}
-      derived_column: deal_size_rank_current {sql: ROW_NUMBER() OVER (ORDER BY average_new_deal_size desc);;}
-      derived_column: deal_size_bottom_third {sql: percentile_cont( coalesce(average_new_deal_size,0)*1.00, .3333 ) OVER () ;;}
-      derived_column: deal_size_top_third_current {sql: percentile_cont( coalesce(average_new_deal_size,0)*1.00, .6666 ) OVER () ;;}
+      column: average_new_deal_size_won {}
+      derived_column: deal_size_rank_current {sql: ROW_NUMBER() OVER (ORDER BY average_new_deal_size_won desc);;}
+      derived_column: deal_size_bottom_third {sql: percentile_cont( coalesce(average_new_deal_size_won,0)*1.00, .3333 ) OVER () ;;}
+      derived_column: deal_size_top_third_current {sql: percentile_cont( coalesce(average_new_deal_size_won,0)*1.00, .6666 ) OVER () ;;}
     }
   }
   dimension: owner_id {type: string hidden: yes}
