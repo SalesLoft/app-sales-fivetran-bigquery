@@ -497,6 +497,57 @@ view: win_percentage_comparison_current {
        ;; }
 }
 
+# Leaaderboard
+view: last_qtd_comparison {
+  derived_table: {
+    explore_source: opportunity {
+      bind_filters: {
+        from_field: opportunity_owner.name_select
+        to_field: opportunity_owner.name_select
+      }
+      filters: { field: opportunity_owner.name value: "-NULL" }
+      filters: { field: opportunity_owner.is_sales_rep value: "Yes" }
+      filters: { field: opportunity.close_fiscal_quarter value: "1 fiscal quarters ago for 1 fiscal quarters" }
+      column: owner_id {}
+      column: total_closed_won_new_business_amount {}
+      derived_column: booking_amount_rank_last_fiscal_q {sql: ROW_NUMBER() OVER (ORDER BY total_closed_won_new_business_amount desc);;}
+    }
+  }
+
+  dimension: owner_id {hidden: yes}
+  dimension: total_closed_won_new_business_amount {
+    hidden: yes
+    label: "Opportunity Closed Won ACV "
+    description: "Only Includes Quota Contributing Opportunities"
+    value_format: "[>=1000000]$0.0,,\"M\";[>=1000]$0,\"K\";$0.00"
+    type: number
+  }
+  dimension: rep_highlight_acv {
+    value_format: "[>=1000000]$0.0,,\"M\";[>=1000]$0,\"K\";$0.00"
+    type: number
+    hidden: yes
+  }
+  dimension: booking_amount_rank_last_fiscal_q_formatted {
+    view_label: "Opportunity Owner"
+    hidden:  yes
+    group_label: "Ranking"
+    sql:
+    CONCAT(CAST(${TABLE}.booking_amount_rank_last_fiscal_q AS STRING),
+    CASE WHEN
+    mod(${TABLE}.booking_amount_rank_last_fiscal_q,100) > 10 AND mod(${TABLE}.booking_amount_rank_last_fiscal_q,100) <= 20 THEN "th"
+    WHEN
+    mod(${TABLE}.booking_amount_rank_last_fiscal_q,10) = 1 THEN "st"
+    WHEN
+    mod(${TABLE}.booking_amount_rank_last_fiscal_q,10) = 2 THEN "nd"
+    WHEN
+    mod(${TABLE}.booking_amount_rank_last_fiscal_q,10) = 3 THEN "rd"
+    ELSE
+    "th"
+    END
+    );;
+  }
+}
+
 # Ramping
 # view: pipeline_comparison {
 #   derived_table: {
