@@ -360,7 +360,7 @@ view: new_deal_size_comparison_current {
       );;
   }
 
-  dimension: average_new_deal_size_current {sql: ${TABLE}.average_new_deal_size;;}
+  dimension: average_new_deal_size_current {sql: ${TABLE}.average_new_deal_size_won;;}
   dimension: deal_size_cohort_current  {
     sql: CASE WHEN ${average_new_deal_size_current} > deal_size_top_third_current THEN 'Top Third'
               WHEN ${average_new_deal_size_current} < deal_size_top_third_current AND ${average_new_deal_size_current} > deal_size_bottom_third THEN 'Middle Third'
