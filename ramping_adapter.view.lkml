@@ -2,7 +2,9 @@
 
 
 
-explore:  first_deal_closed {}
+explore:  first_deal_closed {
+  hidden: yes
+}
 view: first_deal_closed {
 
   derived_table: {
